@@ -275,14 +275,17 @@ const Login = () => {
           {/* Auto-Playing Hero Video Container */}
           <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-800/90 aspect-video sm:aspect-16/9 bg-slate-950 group">
             <video
-              src="/videos/hero_video.mp4"
               autoPlay
               loop
               muted
               playsInline
+              preload="auto"
+              poster="/images/complex_bg.jpg"
               onEnded={(e) => e.target.play()}
               className="w-full h-full object-cover"
-            />
+            >
+              <source src="/videos/hero_video.mp4" type="video/mp4" />
+            </video>
             {/* Ambient overlay gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/25 to-transparent pointer-events-none"></div>
 
