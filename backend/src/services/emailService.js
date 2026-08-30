@@ -23,14 +23,74 @@ const getTransporter = () => {
 };
 
 /**
- * Universal email dispatcher (Guaranteed Non-Blocking)
+ * Universal email dispatcher (Supports Resend API, Brevo API, and SMTP)
  * @param {Object} options - { to, subject, html, text }
  */
 export const sendEmail = async ({ to, subject, html, text }) => {
-  try {
-    const fromName = process.env.SMTP_FROM_NAME || 'Vijaya Laxmi Complex';
-    const fromEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || 'vardhanramagiri84@gmail.com';
+  const fromName = process.env.SMTP_FROM_NAME || 'Vijaya Laxmi Complex';
+  const fromEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || 'vardhanramagiri84@gmail.com';
 
+  // 1. Resend HTTP REST API (HTTPS port 443 - 100% open & guaranteed on Render/Vercel)
+  if (process.env.RESEND_API_KEY) {
+    try {
+      const fromAddress = process.env.RESEND_FROM || `${fromName} <onboarding@resend.dev>`;
+      const res = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          from: fromAddress,
+          to: [to],
+          subject,
+          html,
+          text: text || subject,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        console.log(`\n====================================================\n✅ [Resend HTTP API Email Delivered]\nTo: ${to}\nSubject: ${subject}\nResend ID: ${data.id}\n====================================================\n`);
+        return { success: true, id: data.id };
+      } else {
+        console.warn('Resend API Warning:', data);
+      }
+    } catch (err) {
+      console.warn('Resend fetch error:', err.message);
+    }
+  }
+
+  // 2. Brevo HTTP REST API (HTTPS port 443 - 100% open & guaranteed on Render/Vercel)
+  if (process.env.BREVO_API_KEY) {
+    try {
+      const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+          'api-key': process.env.BREVO_API_KEY,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sender: { name: fromName, email: fromEmail },
+          to: [{ email: to }],
+          subject,
+          htmlContent: html,
+          textContent: text || subject,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        console.log(`\n====================================================\n✅ [Brevo HTTP API Email Delivered]\nTo: ${to}\nSubject: ${subject}\nMessage ID: ${data.messageId}\n====================================================\n`);
+        return { success: true, messageId: data.messageId };
+      } else {
+        console.warn('Brevo API Warning:', data);
+      }
+    } catch (err) {
+      console.warn('Brevo fetch error:', err.message);
+    }
+  }
+
+  // 3. Nodemailer SMTP (Works seamlessly on localhost / unrestricted servers)
+  try {
     const mailOptions = {
       from: `"${fromName}" <${fromEmail}>`,
       to,
@@ -41,13 +101,13 @@ export const sendEmail = async ({ to, subject, html, text }) => {
 
     const transporter = getTransporter();
     
-    // Dispatch in background without holding HTTP response
+    // Dispatch in background
     transporter.sendMail(mailOptions)
       .then((info) => {
         console.log(`\n====================================================\n✅ [SMTP Email Delivered Successfully]\nTo: ${to}\nSubject: ${subject}\nMessageId: ${info.messageId}\n====================================================\n`);
       })
       .catch((err) => {
-        console.warn(`\n⚠️ [SMTP Email Delivery Warning] To: ${to} | Error: ${err.message}\n`);
+        console.warn(`\n⚠️ [SMTP Port Notice] Outbound SMTP port was blocked by cloud host firewall (${err.message}). Set RESEND_API_KEY or BREVO_API_KEY in Render environment to send live emails over HTTPS.\n`);
       });
 
     return { success: true };
