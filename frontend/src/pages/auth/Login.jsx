@@ -136,13 +136,6 @@ const Login = () => {
     }
   };
 
-  // Demo Credentials quick filler
-  const handleQuickFill = (roleEmail, defaultPass = 'Password123!') => {
-    setIdentifier(roleEmail);
-    setPassword(defaultPass);
-    setError('');
-  };
-
   // Step 1: Submit Credentials
   const handleCredentialsSubmit = async (e) => {
     e.preventDefault();
@@ -350,49 +343,6 @@ const Login = () => {
             </div>
           </div>
 
-          {/* 1-Click Demo Accounts Quick-Fill */}
-          <div className="p-4 bg-slate-900/60 rounded-3xl border border-slate-800/80 space-y-2">
-            <p className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 flex items-center gap-1.5">
-              <span>⚡ 1-Click Demo Role Sign-In</span>
-            </p>
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={() => handleQuickFill('superadmin@apartment.com')}
-                className="px-3 py-1.5 rounded-xl bg-purple-950/90 hover:bg-purple-900 border border-purple-800/80 text-purple-200 text-xs font-bold transition cursor-pointer shadow-xs"
-              >
-                Super Admin
-              </button>
-              <button
-                type="button"
-                onClick={() => handleQuickFill('blockadmin.a@apartment.com')}
-                className="px-3 py-1.5 rounded-xl bg-indigo-950/90 hover:bg-indigo-900 border border-indigo-800/80 text-indigo-200 text-xs font-bold transition cursor-pointer shadow-xs"
-              >
-                Block Admin
-              </button>
-              <button
-                type="button"
-                onClick={() => handleQuickFill('receptionist@apartment.com')}
-                className="px-3 py-1.5 rounded-xl bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-800/80 text-emerald-200 text-xs font-bold transition cursor-pointer shadow-xs"
-              >
-                Receptionist
-              </button>
-              <button
-                type="button"
-                onClick={() => handleQuickFill('resident1@apartment.com')}
-                className="px-3 py-1.5 rounded-xl bg-teal-950/90 hover:bg-teal-900 border border-teal-800/80 text-teal-200 text-xs font-bold transition cursor-pointer shadow-xs"
-              >
-                Resident
-              </button>
-              <button
-                type="button"
-                onClick={() => handleQuickFill('security@apartment.com')}
-                className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-200 text-xs font-bold transition cursor-pointer shadow-xs"
-              >
-                Security Desk
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* Right Side: Auth Form Container */}
