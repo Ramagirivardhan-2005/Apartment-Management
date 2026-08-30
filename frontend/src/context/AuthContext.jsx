@@ -47,6 +47,7 @@ export const AuthProvider = ({ children }) => {
 
       if (res.data?.requiresOtp) {
         return {
+          success: true,
           requiresOtp: true,
           verificationToken: res.data.verificationToken,
           email: res.data.email,
