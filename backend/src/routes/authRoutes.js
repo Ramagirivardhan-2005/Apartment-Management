@@ -24,17 +24,20 @@ import { sendEmail, EmailTemplates } from '../services/emailService.js';
 
 const router = express.Router();
 
-// Live SMTP Email Diagnostic Route
+// Live Email Diagnostic Route
 router.get('/test-email', async (req, res) => {
   const targetEmail = req.query.to || 'vardhanramagiri84@gmail.com';
   const result = await sendEmail({
     to: targetEmail,
-    subject: '✅ Vijaya Laxmi Complex - Live SMTP Test Email',
+    subject: '✅ Vijaya Laxmi Complex - Live Test Email',
     html: EmailTemplates.loginOtp('Valued Resident', '846201', 10),
   });
   res.json({
     success: result.success,
-    message: result.success ? `Test OTP email sent successfully to ${targetEmail}` : 'Failed to send test email',
+    message: result.success ? `Test email dispatched to ${targetEmail}` : 'Failed to send test email',
+    provider: result.provider || (process.env.RESEND_API_KEY ? 'resend' : process.env.BREVO_API_KEY ? 'brevo' : 'smtp'),
+    brevoKeyConfigured: !!process.env.BREVO_API_KEY,
+    resendKeyConfigured: !!process.env.RESEND_API_KEY,
     details: result,
   });
 });
