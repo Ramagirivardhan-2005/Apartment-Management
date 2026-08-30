@@ -415,6 +415,7 @@ const Login = () => {
                     <input
                       type="text"
                       required
+                      autoComplete="username"
                       placeholder="admin@apartment.com or REG-2026-XXXXXX"
                       value={identifier}
                       onChange={(e) => setIdentifier(e.target.value)}
@@ -435,6 +436,7 @@ const Login = () => {
                     <input
                       type="password"
                       required
+                      autoComplete="current-password"
                       placeholder="••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}

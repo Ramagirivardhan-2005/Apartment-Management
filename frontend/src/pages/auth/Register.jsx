@@ -221,6 +221,7 @@ const Register = () => {
                   <input
                     type="text"
                     required
+                    autoComplete="name"
                     placeholder="e.g. Rahul Sharma"
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
@@ -237,6 +238,7 @@ const Register = () => {
                     <input
                       type="email"
                       required
+                      autoComplete="email"
                       placeholder="rahul@example.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -252,6 +254,7 @@ const Register = () => {
                     <input
                       type="tel"
                       required
+                      autoComplete="tel"
                       placeholder="9876543210"
                       value={formData.mobile}
                       onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
@@ -269,6 +272,7 @@ const Register = () => {
                     <input
                       type="password"
                       required
+                      autoComplete="new-password"
                       minLength={6}
                       placeholder="••••••••"
                       value={formData.password}
@@ -285,6 +289,7 @@ const Register = () => {
                     <input
                       type="password"
                       required
+                      autoComplete="new-password"
                       minLength={6}
                       placeholder="••••••••"
                       value={formData.confirmPassword}
