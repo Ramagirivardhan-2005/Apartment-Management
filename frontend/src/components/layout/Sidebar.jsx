@@ -115,7 +115,7 @@ const Sidebar = ({ isOpen, onClose }) => {
           </div>
           <div>
             <h2 className="text-sm font-extrabold text-white tracking-wide flex items-center gap-1.5">
-              <span>Skyline Portal</span>
+              <span>Vijaya Laxmi</span>
             </h2>
             <p className="text-[10px] font-bold text-brand-400 uppercase tracking-wider">
               {role?.replace('_', ' ')}
@@ -159,7 +159,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
         {/* Sidebar Footer */}
         <div className="p-3.5 border-t border-slate-800/80 bg-slate-950/60 flex items-center justify-between text-[11px] text-slate-500">
-          <span className="font-medium">Skyline OS</span>
+          <span className="font-medium">Vijaya Laxmi Residency</span>
           <span className="font-mono text-[10px] px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-slate-400 font-bold">
             v2.4
           </span>

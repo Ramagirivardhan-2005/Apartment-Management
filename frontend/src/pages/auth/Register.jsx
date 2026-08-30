@@ -93,7 +93,7 @@ const Register = () => {
 
       <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center relative z-10">
         
-        {/* Left Side: Apartment Management System Resident Benefits Showcase */}
+        {/* Left Side: Apartment Community Showcase */}
         <div className="lg:col-span-6 space-y-6">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-500 text-white flex items-center justify-center shadow-xl shadow-brand-500/30 border border-white/20">
@@ -102,26 +102,26 @@ const Register = () => {
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-[11px] font-extrabold uppercase tracking-widest text-brand-400">
-                  Apartment Management System
+                  Residential Community
                 </span>
                 <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/30">
-                  Resident Signup
+                  Resident Registration
                 </span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-                Join Skyline Residential Community
+                Vijaya Laxmi Complex
               </h1>
             </div>
           </div>
 
-          {/* Platform Info Box */}
+          {/* Complex Info Box */}
           <div className="p-5 bg-slate-900/80 backdrop-blur-xl rounded-3xl border border-slate-800/90 shadow-xl space-y-2">
             <h2 className="text-sm font-extrabold text-white flex items-center gap-2">
               <Sparkles size={16} className="text-brand-400" />
-              <span>Smart Living &amp; Transparent Resident Services</span>
+              <span>Premium Living &amp; Family Community</span>
             </h2>
             <p className="text-xs text-slate-300 leading-relaxed">
-              Create your verified resident profile to unlock instant room bookings, view real-time inventory, settle monthly dues with Razorpay test gateway, raise maintenance tickets, and receive instant community broadcast notices.
+              Become a verified resident of Vijaya Laxmi Complex and experience upscale gated living. Enjoy spacious, well-ventilated flats, 24/7 guarded security, lush green landscaped gardens, 100% power backup, and a warm family-friendly neighborhood.
             </p>
           </div>
 
@@ -132,18 +132,18 @@ const Register = () => {
                 <DoorClosed size={18} />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-white">Live Room Allocation</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">Browse room layouts, floor views, and reserve instantly.</p>
+                <h4 className="text-xs font-bold text-white">Spacious &amp; Sunlit Flats</h4>
+                <p className="text-[11px] text-slate-400 mt-0.5">Contemporary architecture with expansive balconies and optimal natural lighting.</p>
               </div>
             </div>
 
             <div className="p-3.5 bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-3 hover:border-brand-500/40 transition">
-              <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                <CreditCard size={18} />
+              <div className="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                <ShieldCheck size={18} />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-white">Instant Stamped Receipts</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">Automated invoice generation and 1-click PDF downloads.</p>
+                <h4 className="text-xs font-bold text-white">Safe Gated Enclave</h4>
+                <p className="text-[11px] text-slate-400 mt-0.5">Round-the-clock security staff, HD CCTV coverage, and safe pedestrian walkways.</p>
               </div>
             </div>
 
@@ -152,18 +152,18 @@ const Register = () => {
                 <Car size={18} />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-white">Parking Slot Allotment</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">Dedicated two-wheeler and four-wheeler reserved spots.</p>
+                <h4 className="text-xs font-bold text-white">Sheltered Parking</h4>
+                <p className="text-[11px] text-slate-400 mt-0.5">Dedicated two-wheeler and four-wheeler covered parking bays with EV charge points.</p>
               </div>
             </div>
 
             <div className="p-3.5 bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-3 hover:border-brand-500/40 transition">
-              <div className="w-9 h-9 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                <Megaphone size={18} />
+              <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                <Sparkles size={18} />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-white">Maintenance &amp; Notices</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">Track resolution progress and receive vital community alerts.</p>
+                <h4 className="text-xs font-bold text-white">Lush Gardens &amp; Club</h4>
+                <p className="text-[11px] text-slate-400 mt-0.5">Central park, morning jogging tracks, children's play area, and fitness gym.</p>
               </div>
             </div>
           </div>

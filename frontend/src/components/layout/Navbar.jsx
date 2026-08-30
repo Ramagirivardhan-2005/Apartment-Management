@@ -95,12 +95,12 @@ const Navbar = ({ onToggleSidebar }) => {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-sm sm:text-base font-extrabold text-white tracking-tight">Skyline Complex</h1>
+                <h1 className="text-sm sm:text-base font-extrabold text-white tracking-tight">Vijaya Laxmi Complex</h1>
                 <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded bg-brand-500/20 text-brand-400 border border-brand-500/30 hidden sm:inline-block">
-                  PRO
+                  RESIDENCY
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 hidden sm:block">Apartment Operations Suite</p>
+              <p className="text-[11px] text-slate-400 hidden sm:block">Residential Community &amp; Enclave</p>
             </div>
           </div>
         </div>

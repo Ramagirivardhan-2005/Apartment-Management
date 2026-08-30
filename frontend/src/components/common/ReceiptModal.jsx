@@ -14,7 +14,7 @@ const ReceiptModal = ({ payment, isOpen, onClose }) => {
     const doc = new jsPDF();
     doc.setFontSize(20);
     doc.setTextColor(79, 70, 229);
-    doc.text('SKYLINE APARTMENTS COMPLEX', 14, 22);
+    doc.text('VIJAYA LAXMI COMPLEX', 14, 22);
 
     doc.setFontSize(10);
     doc.setTextColor(100);
@@ -64,7 +64,7 @@ const ReceiptModal = ({ payment, isOpen, onClose }) => {
               <Building2 size={20} />
             </div>
             <div>
-              <h3 className="text-base font-extrabold text-white">Skyline Apartments Complex</h3>
+              <h3 className="text-base font-extrabold text-white">Vijaya Laxmi Complex</h3>
               <p className="text-xs text-slate-400">Official Payment Receipt & Voucher</p>
             </div>
           </div>
