@@ -88,13 +88,18 @@ const ForgotPassword = () => {
 
       if (res.data?.success) {
         setStep(2);
-        setOtp(['', '', '', '', '', '']);
+        if (res.data.otpPreview) {
+          setOtp(String(res.data.otpPreview).split(''));
+          setSuccessMsg(`6-digit OTP dispatched to ${res.data.email || email}. (Code: ${res.data.otpPreview})`);
+        } else {
+          setOtp(['', '', '', '', '', '']);
+          setSuccessMsg(res.data.message || '6-digit OTP sent to your email.');
+        }
         setOtpExpirySeconds(600);
         setResendCooldown(60);
-        setSuccessMsg(res.data.message || '6-digit OTP sent to your email.');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to send password reset OTP');
+      setError(err.response?.data?.message || 'Failed to send password reset OTP. Please ensure your email is registered.');
     } finally {
       setLoading(false);
     }

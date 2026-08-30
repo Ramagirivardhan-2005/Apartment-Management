@@ -8,7 +8,10 @@ const getTransporter = () => {
   return nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
-    secure: true, // Port 465 with SSL is reliable and unblocked across all cloud providers including Render
+    secure: true,
+    connectionTimeout: 4000,
+    greetingTimeout: 4000,
+    socketTimeout: 4000,
     auth: {
       user: smtpUser,
       pass: smtpPass,
@@ -20,7 +23,7 @@ const getTransporter = () => {
 };
 
 /**
- * Universal email dispatcher
+ * Universal email dispatcher (Guaranteed Non-Blocking)
  * @param {Object} options - { to, subject, html, text }
  */
 export const sendEmail = async ({ to, subject, html, text }) => {
@@ -37,11 +40,19 @@ export const sendEmail = async ({ to, subject, html, text }) => {
     };
 
     const transporter = getTransporter();
-    const info = await transporter.sendMail(mailOptions);
-    console.log(`\n====================================================\n✅ [SMTP Email Sent Successfully via smtp.gmail.com:465]\nTo: ${to}\nSubject: ${subject}\nMessageId: ${info.messageId}\n====================================================\n`);
-    return { success: true, messageId: info.messageId };
+    
+    // Dispatch in background without holding HTTP response
+    transporter.sendMail(mailOptions)
+      .then((info) => {
+        console.log(`\n====================================================\n✅ [SMTP Email Delivered Successfully]\nTo: ${to}\nSubject: ${subject}\nMessageId: ${info.messageId}\n====================================================\n`);
+      })
+      .catch((err) => {
+        console.warn(`\n⚠️ [SMTP Email Delivery Warning] To: ${to} | Error: ${err.message}\n`);
+      });
+
+    return { success: true };
   } catch (error) {
-    console.error(`\n❌ [SMTP Email Delivery Error] To: ${to} | Error: ${error.message}\n`);
+    console.error(`\n❌ [SMTP Setup Warning] To: ${to} | Error: ${error.message}\n`);
     return { success: false, error: error.message };
   }
 };

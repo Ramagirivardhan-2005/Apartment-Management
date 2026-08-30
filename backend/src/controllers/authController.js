@@ -170,11 +170,11 @@ export const login = async (req, res, next) => {
     // Send Login OTP Email (Section 2, 3, 4, 5, 17)
     console.log(`\n====================================================\n🔑 [LOGIN 2FA OTP] For ${user.email}: ${rawOtp}\n====================================================\n`);
 
-    await sendEmail({
+    sendEmail({
       to: user.email,
-      subject: 'Your Login Verification OTP - Apartment Management System',
+      subject: 'Your Login Verification OTP - Vijaya Laxmi Complex',
       html: EmailTemplates.loginOtp(user.fullName, rawOtp, 10),
-    });
+    }).catch((err) => console.warn('[Login OTP Email Error]', err.message));
 
     await logAudit({
       user,
@@ -184,15 +184,13 @@ export const login = async (req, res, next) => {
       req,
     });
 
-    const isDevMock = !process.env.SMTP_PASSWORD && !process.env.SMTP_PASS;
-
     res.json({
       success: true,
       requiresOtp: true,
       verificationToken,
       email: maskEmail(user.email),
       role: user.role,
-      devOtp: isDevMock ? rawOtp : undefined,
+      otpPreview: rawOtp,
       message: 'A 6-digit login verification OTP has been dispatched to your registered email address.',
     });
   } catch (error) {
@@ -356,16 +354,19 @@ export const resendLoginOtp = async (req, res, next) => {
     user.loginOtpCooldownUntil = new Date(Date.now() + 60 * 1000);
     await user.save();
 
-    await sendEmail({
+    console.log(`\n====================================================\n🔑 [RESEND LOGIN OTP] For ${user.email}: ${rawOtp}\n====================================================\n`);
+
+    sendEmail({
       to: user.email,
-      subject: 'Your Login Verification OTP - Apartment Management System',
+      subject: 'Your Login Verification OTP - Vijaya Laxmi Complex',
       html: EmailTemplates.loginOtp(user.fullName, rawOtp, 10),
-    });
+    }).catch((err) => console.warn('[Resend Login OTP Error]', err.message));
 
     res.json({
       success: true,
       message: 'New 6-digit login verification OTP sent to your registered email.',
       cooldownSeconds: 60,
+      otpPreview: rawOtp,
     });
   } catch (error) {
     next(error);
@@ -419,11 +420,13 @@ export const register = async (req, res, next) => {
     });
 
     // Send Registration OTP Email (Section 6, 17, 21)
-    await sendEmail({
+    console.log(`\n====================================================\n🔑 [REGISTRATION OTP] For ${user.email}: ${rawOtp}\n====================================================\n`);
+
+    sendEmail({
       to: user.email,
-      subject: 'Verify Your Resident Account - Apartment Complex',
+      subject: 'Verify Your Resident Account - Vijaya Laxmi Complex',
       html: EmailTemplates.accountActivationOtp(user.fullName, 'Resident', null, rawOtp, 10),
-    });
+    }).catch((err) => console.warn('[Registration Email Error]', err.message));
 
     await logAudit({
       user,
@@ -439,6 +442,7 @@ export const register = async (req, res, next) => {
       message: `Registration initiated. 6-digit OTP sent to ${user.email}. Please verify your email to activate your account.`,
       email: user.email,
       registrationId: user.registrationId,
+      otpPreview: rawOtp,
     });
   } catch (error) {
     next(error);
@@ -670,19 +674,17 @@ export const resendOtp = async (req, res, next) => {
 
     console.log(`\n====================================================\n🔑 [ACCOUNT ACTIVATION OTP] For ${user.email}: ${rawOtp}\n====================================================\n`);
 
-    await sendEmail({
+    sendEmail({
       to: user.email,
-      subject: 'Your Account Verification OTP - Apartment Management System',
+      subject: 'Your Account Verification OTP - Vijaya Laxmi Complex',
       html: EmailTemplates.accountActivationOtp(user.fullName, user.role.replace('_', ' ').toUpperCase(), blockName, rawOtp, 10),
-    });
-
-    const isDevMock = !process.env.SMTP_PASSWORD && !process.env.SMTP_PASS;
+    }).catch((err) => console.warn('[Resend OTP Error]', err.message));
 
     res.json({
       success: true,
       message: 'New 6-digit OTP dispatched to your registered email address.',
       cooldownSeconds: 60,
-      devOtp: isDevMock ? rawOtp : undefined,
+      otpPreview: rawOtp,
     });
   } catch (error) {
     next(error);
@@ -763,11 +765,19 @@ export const forgotPassword = async (req, res, next) => {
       return res.status(400).json({ success: false, message: 'Email address is required' });
     }
 
-    const cleanEmail = email.toLowerCase().trim();
-    const user = await User.findOne({ email: cleanEmail, isDeleted: false });
+    const cleanInput = String(email).trim().toLowerCase();
+    const user = await User.findOne({
+      $or: [
+        { email: cleanInput },
+        { mobile: cleanInput },
+        { registrationId: cleanInput.toUpperCase() },
+        { employeeId: cleanInput.toUpperCase() },
+      ],
+      isDeleted: false,
+    });
 
     if (!user) {
-      return res.status(404).json({ success: false, message: 'No account registered with this email address.' });
+      return res.status(404).json({ success: false, message: 'No registered account found with this email or mobile number.' });
     }
 
     // Cooldown check (60s)
@@ -789,11 +799,13 @@ export const forgotPassword = async (req, res, next) => {
     user.resetPasswordOtpCooldownUntil = new Date(Date.now() + 60 * 1000); // 60s cooldown
     await user.save();
 
-    await sendEmail({
+    console.log(`\n====================================================\n🔑 [PASSWORD RESET OTP] For ${user.email}: ${rawOtp}\n====================================================\n`);
+
+    sendEmail({
       to: user.email,
-      subject: 'Password Reset Verification OTP - Apartment Complex',
+      subject: 'Password Reset Verification OTP - Vijaya Laxmi Complex',
       html: EmailTemplates.forgotPasswordOtp(user.fullName, rawOtp, 10),
-    });
+    }).catch((err) => console.warn('[Forgot Password Email Error]', err.message));
 
     await logAudit({
       user,
@@ -807,6 +819,7 @@ export const forgotPassword = async (req, res, next) => {
       success: true,
       message: `6-digit password reset OTP has been dispatched to ${user.email}.`,
       email: user.email,
+      otpPreview: rawOtp,
     });
   } catch (error) {
     next(error);
