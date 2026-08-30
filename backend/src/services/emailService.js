@@ -3,10 +3,12 @@ import nodemailer from 'nodemailer';
 
 const getTransporter = () => {
   const smtpUser = process.env.SMTP_USER || 'vardhanramagiri84@gmail.com';
-  const smtpPass = (process.env.SMTP_PASSWORD || process.env.SMTP_PASS || '').replace(/\s+/g, '');
+  const smtpPass = (process.env.SMTP_PASSWORD || process.env.SMTP_PASS || 'ygxueosmpjsxryxi').replace(/\s+/g, '');
 
   return nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // Port 465 with SSL is reliable and unblocked across all cloud providers including Render
     auth: {
       user: smtpUser,
       pass: smtpPass,
@@ -23,8 +25,8 @@ const getTransporter = () => {
  */
 export const sendEmail = async ({ to, subject, html, text }) => {
   try {
-    const fromName = process.env.SMTP_FROM_NAME || 'Apartment Management System';
-    const fromEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || 'no-reply@apartment.com';
+    const fromName = process.env.SMTP_FROM_NAME || 'Vijaya Laxmi Complex';
+    const fromEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || 'vardhanramagiri84@gmail.com';
 
     const mailOptions = {
       from: `"${fromName}" <${fromEmail}>`,
@@ -34,17 +36,10 @@ export const sendEmail = async ({ to, subject, html, text }) => {
       text: text || subject,
     };
 
-    const hasPassword = !!(process.env.SMTP_PASSWORD || process.env.SMTP_PASS);
-
-    if (hasPassword) {
-      const transporter = getTransporter();
-      const info = await transporter.sendMail(mailOptions);
-      console.log(`\n====================================================\n✅ [SMTP Email Sent via ${process.env.SMTP_HOST || 'smtp.gmail.com'}]\nTo: ${to}\nSubject: ${subject}\nMessageId: ${info.messageId}\n====================================================\n`);
-      return { success: true, messageId: info.messageId };
-    } else {
-      console.log(`\n====================================================\n📬 [EMAIL NOTIFICATION (SMTP_PASSWORD not configured)]\nTo: ${to}\nSubject: ${subject}\nℹ️ To receive real emails to ${to}, configure SMTP_PASSWORD in backend/.env\n====================================================\n`);
-      return { success: true, mocked: true };
-    }
+    const transporter = getTransporter();
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`\n====================================================\n✅ [SMTP Email Sent Successfully via smtp.gmail.com:465]\nTo: ${to}\nSubject: ${subject}\nMessageId: ${info.messageId}\n====================================================\n`);
+    return { success: true, messageId: info.messageId };
   } catch (error) {
     console.error(`\n❌ [SMTP Email Delivery Error] To: ${to} | Error: ${error.message}\n`);
     return { success: false, error: error.message };
