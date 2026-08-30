@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import AppLayout from './components/layout/AppLayout';
+import api from './api/client';
 
 // Auth Pages
 import Login from './pages/auth/Login';
@@ -85,6 +86,11 @@ const RootRedirect = () => {
 };
 
 const App = () => {
+  useEffect(() => {
+    // Proactively warm up backend service on Render to eliminate cold-start latency
+    api.get('/health').catch(() => {});
+  }, []);
+
   return (
     <Routes>
       {/* Root Route */}
