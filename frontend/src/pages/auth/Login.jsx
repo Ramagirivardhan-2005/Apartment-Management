@@ -266,14 +266,14 @@ const Login = () => {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[11px] font-extrabold uppercase tracking-widest text-brand-700 bg-brand-500/10 px-2 py-0.5 rounded-md border border-brand-500/20">
+                <span className="text-[11px] font-extrabold uppercase tracking-widest text-brand-300 bg-brand-500/20 px-2.5 py-0.5 rounded-full border border-brand-500/30">
                   Premier Gated Community
                 </span>
-                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-600/15 text-emerald-800 border border-emerald-600/30">
+                <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
                   Verified Residency
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-0.5">
+              <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight mt-1 drop-shadow-md">
                 Vijaya Laxmi Complex
               </h1>
             </div>

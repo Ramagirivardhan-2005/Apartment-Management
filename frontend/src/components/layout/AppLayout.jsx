@@ -7,7 +7,7 @@ const AppLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-transparent text-slate-900 flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+    <div className="min-h-screen bg-transparent text-slate-100 flex flex-col antialiased selection:bg-brand-500 selection:text-white">
       <div className="flex-1 flex overflow-hidden">
         {/* Role-Based Sidebar */}
         <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
