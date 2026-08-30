@@ -1,8 +1,22 @@
 import axios from 'axios';
 import { getErrorMessage } from '../utils/errorHandler';
 
+// Determine the API base URL:
+// 1. If VITE_API_URL is configured in env, use it.
+// 2. In production (Vercel deployment) or when accessed via non-localhost, use the live Render backend.
+// 3. In local development (localhost), use '/api' to use Vite dev proxy.
+const getBaseURL = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  if (import.meta.env.PROD || (typeof window !== 'undefined' && window.location.hostname !== 'localhost')) {
+    return 'https://apartment-management-8ya0.onrender.com/api';
+  }
+  return '/api';
+};
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: getBaseURL(),
   headers: {
     'Content-Type': 'application/json',
   },
