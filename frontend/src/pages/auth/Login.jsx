@@ -20,6 +20,10 @@ import {
   CreditCard,
   DoorClosed,
   Users,
+  Car,
+  Megaphone,
+  BarChart3,
+  Layers,
 } from 'lucide-react';
 
 const Login = () => {
@@ -246,97 +250,123 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 sm:p-6 lg:p-12 relative overflow-hidden">
-      {/* Ambient background glows */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-brand-600/15 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-      <div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
+    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-12 relative">
+      <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center relative z-10">
         
-        {/* Left Side: Rich Hero Brand Showcase (Desktop) */}
-        <div className="lg:col-span-6 space-y-6 hidden lg:block">
+        {/* Left Side: Apartment Management System Showcase */}
+        <div className="lg:col-span-7 space-y-6">
+          {/* Brand Header */}
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-500 text-white flex items-center justify-center shadow-xl shadow-brand-500/25 border border-white/15">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-500 text-white flex items-center justify-center shadow-xl shadow-brand-500/30 border border-white/20">
               <Building2 size={26} />
             </div>
             <div>
-              <span className="text-[11px] font-extrabold uppercase tracking-widest text-brand-400">
-                Enterprise Residential OS
-              </span>
-              <h1 className="text-2xl font-black text-white tracking-tight">Skyline Complex</h1>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-extrabold uppercase tracking-widest text-brand-400">
+                  Residential Community Platform
+                </span>
+                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  Active
+                </span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                Skyline Apartment Management System
+              </h1>
             </div>
           </div>
 
-          <div className="space-y-2">
-            <h2 className="text-3xl font-black text-white tracking-tight leading-tight">
-              Modern Community &amp; Multi-Block Operations
+          {/* System Purpose Description */}
+          <div className="p-5 bg-slate-900/80 backdrop-blur-xl rounded-3xl border border-slate-800/90 shadow-xl space-y-2">
+            <h2 className="text-sm font-extrabold text-white flex items-center gap-2">
+              <Sparkles size={16} className="text-brand-400" />
+              <span>About the Apartment Management System</span>
             </h2>
-            <p className="text-slate-400 text-xs leading-relaxed">
-              Automated apartment bookings, cryptographic 2FA staff security, Razorpay rent collections, and digital gate visitor control.
+            <p className="text-xs text-slate-300 leading-relaxed">
+              A modern, centralized residential ERP platform engineered to digitize community living, automate room bookings, manage multi-block towers, secure gate movements, and process transparent maintenance dues with Razorpay and automated overdue late fees.
             </p>
           </div>
 
-          {/* Floating Feature Glass Cards */}
-          <div className="grid grid-cols-1 gap-3 pt-2">
-            <div className="p-3.5 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-slate-800/80 flex items-center gap-3.5 shadow-lg">
-              <div className="w-10 h-10 rounded-xl bg-brand-500/20 text-brand-400 border border-brand-500/30 flex items-center justify-center shrink-0">
-                <ShieldCheck size={20} />
+          {/* Key Capabilities Matrix */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="p-3.5 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-slate-800/80 flex items-start gap-3 hover:border-brand-500/40 transition">
+              <div className="w-9 h-9 rounded-xl bg-brand-500/20 text-brand-400 border border-brand-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                <Layers size={18} />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-white">Cryptographic 2FA Authentication</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">SHA-256 encrypted verification OTPs with timing-safe validation</p>
+                <h4 className="text-xs font-bold text-white">Multi-Block Tower Control</h4>
+                <p className="text-[11px] text-slate-400 mt-0.5">Isolated block administration for rooms, parking slots, and staff.</p>
               </div>
             </div>
 
-            <div className="p-3.5 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-slate-800/80 flex items-center gap-3.5 shadow-lg">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0">
-                <CreditCard size={20} />
+            <div className="p-3.5 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-slate-800/80 flex items-start gap-3 hover:border-brand-500/40 transition">
+              <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                <DoorClosed size={18} />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-white">Razorpay Orders &amp; Overdue Engine</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">Instant checkout modals, dynamic advance rules &amp; stamped receipts</p>
+                <h4 className="text-xs font-bold text-white">8-Step Booking Wizard</h4>
+                <p className="text-[11px] text-slate-400 mt-0.5">Automates KYC checks, max 4 rooms rule, and 60%/4mo advance rent.</p>
+              </div>
+            </div>
+
+            <div className="p-3.5 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-slate-800/80 flex items-start gap-3 hover:border-brand-500/40 transition">
+              <div className="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                <ShieldCheck size={18} />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-white">Gate Security &amp; 2FA</h4>
+                <p className="text-[11px] text-slate-400 mt-0.5">Encrypted SHA-256 staff 2FA and privacy-masked visitor passes.</p>
+              </div>
+            </div>
+
+            <div className="p-3.5 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-slate-800/80 flex items-start gap-3 hover:border-brand-500/40 transition">
+              <div className="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                <CreditCard size={18} />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-white">Razorpay &amp; Overdue Dues</h4>
+                <p className="text-[11px] text-slate-400 mt-0.5">Tiered late fee calculation engine with stamped PDF vouchers.</p>
               </div>
             </div>
           </div>
 
           {/* 1-Click Demo Accounts Quick-Fill */}
-          <div className="pt-2">
-            <p className="text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-2">
-              ⚡ 1-Click Quick Demo Sign-In
+          <div className="p-4 bg-slate-900/60 rounded-3xl border border-slate-800/80 space-y-2">
+            <p className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400 flex items-center gap-1.5">
+              <span>⚡ 1-Click Demo Role Sign-In</span>
             </p>
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={() => handleQuickFill('superadmin@apartment.com')}
-                className="px-2.5 py-1.5 rounded-xl bg-purple-950/80 hover:bg-purple-900 border border-purple-800/70 text-purple-300 text-[11px] font-bold transition cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-purple-950/90 hover:bg-purple-900 border border-purple-800/80 text-purple-200 text-xs font-bold transition cursor-pointer shadow-xs"
               >
                 Super Admin
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickFill('blockadmin.a@apartment.com')}
-                className="px-2.5 py-1.5 rounded-xl bg-indigo-950/80 hover:bg-indigo-900 border border-indigo-800/70 text-indigo-300 text-[11px] font-bold transition cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-indigo-950/90 hover:bg-indigo-900 border border-indigo-800/80 text-indigo-200 text-xs font-bold transition cursor-pointer shadow-xs"
               >
                 Block Admin
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickFill('receptionist@apartment.com')}
-                className="px-2.5 py-1.5 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-800/70 text-emerald-300 text-[11px] font-bold transition cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-emerald-950/90 hover:bg-emerald-900 border border-emerald-800/80 text-emerald-200 text-xs font-bold transition cursor-pointer shadow-xs"
               >
                 Receptionist
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickFill('resident1@apartment.com')}
-                className="px-2.5 py-1.5 rounded-xl bg-teal-950/80 hover:bg-teal-900 border border-teal-800/70 text-teal-300 text-[11px] font-bold transition cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-teal-950/90 hover:bg-teal-900 border border-teal-800/80 text-teal-200 text-xs font-bold transition cursor-pointer shadow-xs"
               >
                 Resident
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickFill('security@apartment.com')}
-                className="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-300 text-[11px] font-bold transition cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-200 text-xs font-bold transition cursor-pointer shadow-xs"
               >
                 Security Desk
               </button>
@@ -345,24 +375,21 @@ const Login = () => {
         </div>
 
         {/* Right Side: Auth Form Container */}
-        <div className="lg:col-span-6 w-full max-w-md mx-auto">
-          <div className="bg-slate-900/90 backdrop-blur-2xl border border-slate-800/90 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+        <div className="lg:col-span-5 w-full max-w-md mx-auto">
+          <div className="bg-slate-900/90 backdrop-blur-2xl border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
             
             {/* Header */}
             <div>
-              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center mb-3 shadow-lg shadow-brand-500/25 border border-white/10 lg:hidden">
-                <Building2 size={22} />
-              </div>
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-brand-400">
-                {step === 1 ? 'Apartment Portal' : 'Two-Factor Authentication'}
+                {step === 1 ? 'Portal Access' : 'Security Verification'}
               </span>
               <h2 className="text-xl sm:text-2xl font-black text-white mt-1">
                 {step === 1 ? 'Sign In to Your Account' : 'Verify Login OTP'}
               </h2>
               <p className="text-xs text-slate-400 mt-1">
                 {step === 1
-                  ? 'Enter your credentials to access your assigned role portal.'
-                  : `Dispatched a 6-digit code to ${maskedEmail}`}
+                  ? 'Enter your credentials to access your assigned apartment management portal.'
+                  : `Enter the 6-digit OTP code dispatched to ${maskedEmail}`}
               </p>
             </div>
 
@@ -378,7 +405,7 @@ const Login = () => {
                 </p>
                 <Link
                   to="/setup"
-                  className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl text-xs transition mt-1"
+                  className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl text-xs transition mt-1 cursor-pointer"
                 >
                   <span>Setup Root Super Admin</span>
                   <ArrowRight size={13} />
