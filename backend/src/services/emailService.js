@@ -13,7 +13,7 @@ const getTransporter = () => {
   const isBrevo = smtpPass.startsWith('xsmtpsib-') || process.env.SMTP_HOST?.includes('brevo');
 
   if (isBrevo) {
-    const smtpUser = process.env.BREVO_USER || process.env.SMTP_USER || 'vardhanramagiri84@gmail.com';
+    const smtpUser = process.env.BREVO_USER || process.env.SMTP_USER || 'b733fd001@smtp-brevo.com';
     const smtpPort = parseInt(process.env.SMTP_PORT, 10) || 587;
     return nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp-relay.brevo.com',
