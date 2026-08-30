@@ -109,25 +109,30 @@ app.use((req, res, next) => {
   next();
 });
 
-// Mount API Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/blocks', blockRoutes);
-app.use('/api/rooms', roomRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/bookings', bookingRoutes);
-app.use('/api/payments', paymentRoutes);
-app.use('/api/parking', parkingRoutes);
-app.use('/api/visitors', visitorRoutes);
-app.use('/api/security', securityRoutes);
-app.use('/api/complaints', complaintRoutes);
-app.use('/api/announcements', announcementRoutes);
-app.use('/api/reports', reportRoutes);
-app.use('/api/notifications', notificationRoutes);
-app.use('/api/receptionists', receptionistRoutes);
-app.use('/api/audit', auditRoutes);
+// Mount API Routes (with /api and direct root alias for production resilience)
+const registerRoutes = (prefix = '/api') => {
+  app.use(`${prefix}/auth`, authRoutes);
+  app.use(`${prefix}/blocks`, blockRoutes);
+  app.use(`${prefix}/rooms`, roomRoutes);
+  app.use(`${prefix}/users`, userRoutes);
+  app.use(`${prefix}/bookings`, bookingRoutes);
+  app.use(`${prefix}/payments`, paymentRoutes);
+  app.use(`${prefix}/parking`, parkingRoutes);
+  app.use(`${prefix}/visitors`, visitorRoutes);
+  app.use(`${prefix}/security`, securityRoutes);
+  app.use(`${prefix}/complaints`, complaintRoutes);
+  app.use(`${prefix}/announcements`, announcementRoutes);
+  app.use(`${prefix}/reports`, reportRoutes);
+  app.use(`${prefix}/notifications`, notificationRoutes);
+  app.use(`${prefix}/receptionists`, receptionistRoutes);
+  app.use(`${prefix}/audit`, auditRoutes);
+};
+
+registerRoutes('/api');
+registerRoutes(''); // Support direct aliases /auth/login etc.
 
 // Health Check
-app.get('/api/health', (req, res) => {
+app.get(['/api/health', '/health'], (req, res) => {
   res.json({
     status: 'online',
     database: mongoose.connection.readyState === 1 ? 'connected' : 'connecting',

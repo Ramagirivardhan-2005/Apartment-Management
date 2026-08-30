@@ -2,17 +2,28 @@ import axios from 'axios';
 import { getErrorMessage } from '../utils/errorHandler';
 
 // Determine the API base URL:
-// 1. If VITE_API_URL is configured in env, use it.
+// 1. If VITE_API_URL is set in environment, ensure it cleanly targets /api.
 // 2. In production (Vercel deployment) or when accessed via non-localhost, use the live Render backend.
 // 3. In local development (localhost), use '/api' to use Vite dev proxy.
 const getBaseURL = () => {
-  if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
+  let url = import.meta.env.VITE_API_URL;
+
+  if (!url || typeof url !== 'string' || url.trim() === '') {
+    if (import.meta.env.PROD || (typeof window !== 'undefined' && window.location.hostname !== 'localhost')) {
+      url = 'https://apartment-management-8ya0.onrender.com/api';
+    } else {
+      url = '/api';
+    }
   }
-  if (import.meta.env.PROD || (typeof window !== 'undefined' && window.location.hostname !== 'localhost')) {
-    return 'https://apartment-management-8ya0.onrender.com/api';
+
+  url = url.trim().replace(/\/+$/, '');
+
+  // If the absolute backend URL was provided without the /api suffix, automatically append it
+  if (url.startsWith('http') && !url.endsWith('/api') && !url.includes('/api/')) {
+    url = `${url}/api`;
   }
-  return '/api';
+
+  return url;
 };
 
 const api = axios.create({
