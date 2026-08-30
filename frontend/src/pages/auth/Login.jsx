@@ -15,6 +15,11 @@ import {
   KeyRound,
   ShieldCheck,
   ArrowLeft,
+  Sparkles,
+  Check,
+  CreditCard,
+  DoorClosed,
+  Users,
 } from 'lucide-react';
 
 const Login = () => {
@@ -118,44 +123,49 @@ const Login = () => {
       case 'resident':
         navigate('/resident/dashboard', { replace: true });
         break;
+      case 'security':
+        navigate('/security/dashboard', { replace: true });
+        break;
       default:
-        navigate('/', { replace: true });
+        navigate('/resident/dashboard', { replace: true });
+        break;
     }
   };
 
-  // STEP 1: Submit Credentials
+  // Demo Credentials quick filler
+  const handleQuickFill = (roleEmail, defaultPass = 'Password123!') => {
+    setIdentifier(roleEmail);
+    setPassword(defaultPass);
+    setError('');
+  };
+
+  // Step 1: Submit Credentials
   const handleCredentialsSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setResendMsg('');
     setLoading(true);
 
-    const result = await login(identifier, password);
+    const res = await login(identifier, password);
+    setLoading(false);
 
-    if (result.requiresOtp) {
-      // Transition to Step 2: 2FA OTP
-      setVerificationToken(result.verificationToken);
-      setMaskedEmail(result.email || 'your registered email');
-      setUserRole(result.role);
-      setOtp(['', '', '', '', '', '']);
-      setOtpExpirySeconds(600);
-      setResendCooldown(60);
-      setStep(2);
-      setLoading(false);
-      setTimeout(() => inputRefs.current[0]?.focus(), 100);
-    } else if (result.success) {
-      redirectUserByRole(result.user);
-    } else if (result.isEmailUnverified) {
-      navigate('/verify-otp', {
-        state: { email: result.email, role: result.role },
-      });
+    if (res.success) {
+      if (res.requiresOtp) {
+        setStep(2);
+        setVerificationToken(res.verificationToken);
+        setMaskedEmail(res.email);
+        setUserRole(res.role);
+        setOtp(['', '', '', '', '', '']);
+        setOtpExpirySeconds(600);
+        setResendCooldown(60);
+      } else {
+        redirectUserByRole(res.user);
+      }
     } else {
-      setError(result.message || 'Invalid credentials.');
-      setLoading(false);
+      setError(res.message || 'Invalid login credentials. Please try again.');
     }
   };
 
-  // STEP 2: Handle OTP input
+  // Step 2: Segmented OTP Input Handling
   const handleOtpChange = (index, value) => {
     if (isNaN(value)) return;
     const newOtp = [...otp];
@@ -178,44 +188,45 @@ const Login = () => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData('text').trim();
     if (/^\d{6}$/.test(pastedData)) {
-      setOtp(pastedData.split(''));
+      const digits = pastedData.split('');
+      setOtp(digits);
       inputRefs.current[5]?.focus();
       setError('');
     }
   };
 
-  // STEP 2: Verify 6-digit OTP
+  // Step 2: Submit 2FA OTP
   const handleOtpSubmit = async (e) => {
-    e?.preventDefault();
+    e.preventDefault();
     const fullOtp = otp.join('');
 
     if (fullOtp.length !== 6) {
-      setError('Please enter the complete 6-digit OTP code.');
+      setError('Please enter the full 6-digit OTP code.');
       return;
     }
 
     if (otpExpirySeconds <= 0) {
-      setError('The OTP has expired. Please click Resend OTP to receive a new code.');
+      setError('This OTP has expired. Please click Resend OTP.');
       return;
     }
 
     setError('');
-    setResendMsg('');
     setLoading(true);
 
-    const result = await verifyLoginOtp(verificationToken, fullOtp);
+    const res = await verifyLoginOtp(verificationToken, fullOtp);
+    setLoading(false);
 
-    if (result.success) {
-      redirectUserByRole(result.user);
+    if (res.success) {
+      redirectUserByRole(res.user);
     } else {
-      setError(result.message || 'OTP verification failed.');
-      setLoading(false);
+      setError(res.message || 'Invalid or expired OTP.');
     }
   };
 
-  // Resend Login OTP
+  // Resend 2FA OTP
   const handleResend = async () => {
     if (resendCooldown > 0 || loading) return;
+
     setError('');
     setResendMsg('');
     setLoading(true);
@@ -235,215 +246,315 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col justify-center items-center p-4 sm:p-6 lg:p-8">
-      <div className="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4 sm:p-6 lg:p-12 relative overflow-hidden">
+      {/* Ambient background glows */}
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-brand-600/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div className="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
         
-        {/* Brand & Title */}
-        <div className="text-center">
-          <div className="w-12 h-12 rounded-2xl bg-brand-600 text-white flex items-center justify-center mx-auto mb-3 shadow-lg shadow-brand-500/20">
-            <Building2 size={24} />
+        {/* Left Side: Rich Hero Brand Showcase (Desktop) */}
+        <div className="lg:col-span-6 space-y-6 hidden lg:block">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-500 text-white flex items-center justify-center shadow-xl shadow-brand-500/25 border border-white/15">
+              <Building2 size={26} />
+            </div>
+            <div>
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-brand-400">
+                Enterprise Residential OS
+              </span>
+              <h1 className="text-2xl font-black text-white tracking-tight">Skyline Complex</h1>
+            </div>
           </div>
-          <span className="text-[11px] font-extrabold uppercase tracking-widest text-brand-400">
-            {step === 1 ? 'Apartment Management Portal' : 'Two-Factor Authentication'}
-          </span>
-          <h2 className="text-xl sm:text-2xl font-extrabold text-white mt-1">
-            {step === 1 ? 'Sign In to Your Account' : 'Verify Login OTP'}
-          </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            {step === 1
-              ? 'Role-based management system with mandatory 2FA email security'
-              : `Enter the 6-digit verification code dispatched to ${maskedEmail}`}
-          </p>
+
+          <div className="space-y-2">
+            <h2 className="text-3xl font-black text-white tracking-tight leading-tight">
+              Modern Community &amp; Multi-Block Operations
+            </h2>
+            <p className="text-slate-400 text-xs leading-relaxed">
+              Automated apartment bookings, cryptographic 2FA staff security, Razorpay rent collections, and digital gate visitor control.
+            </p>
+          </div>
+
+          {/* Floating Feature Glass Cards */}
+          <div className="grid grid-cols-1 gap-3 pt-2">
+            <div className="p-3.5 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-slate-800/80 flex items-center gap-3.5 shadow-lg">
+              <div className="w-10 h-10 rounded-xl bg-brand-500/20 text-brand-400 border border-brand-500/30 flex items-center justify-center shrink-0">
+                <ShieldCheck size={20} />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-white">Cryptographic 2FA Authentication</h4>
+                <p className="text-[11px] text-slate-400 mt-0.5">SHA-256 encrypted verification OTPs with timing-safe validation</p>
+              </div>
+            </div>
+
+            <div className="p-3.5 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-slate-800/80 flex items-center gap-3.5 shadow-lg">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0">
+                <CreditCard size={20} />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-white">Razorpay Orders &amp; Overdue Engine</h4>
+                <p className="text-[11px] text-slate-400 mt-0.5">Instant checkout modals, dynamic advance rules &amp; stamped receipts</p>
+              </div>
+            </div>
+          </div>
+
+          {/* 1-Click Demo Accounts Quick-Fill */}
+          <div className="pt-2">
+            <p className="text-[10px] font-extrabold uppercase tracking-widest text-slate-500 mb-2">
+              ⚡ 1-Click Quick Demo Sign-In
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => handleQuickFill('superadmin@apartment.com')}
+                className="px-2.5 py-1.5 rounded-xl bg-purple-950/80 hover:bg-purple-900 border border-purple-800/70 text-purple-300 text-[11px] font-bold transition cursor-pointer"
+              >
+                Super Admin
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickFill('blockadmin.a@apartment.com')}
+                className="px-2.5 py-1.5 rounded-xl bg-indigo-950/80 hover:bg-indigo-900 border border-indigo-800/70 text-indigo-300 text-[11px] font-bold transition cursor-pointer"
+              >
+                Block Admin
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickFill('receptionist@apartment.com')}
+                className="px-2.5 py-1.5 rounded-xl bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-800/70 text-emerald-300 text-[11px] font-bold transition cursor-pointer"
+              >
+                Receptionist
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickFill('resident1@apartment.com')}
+                className="px-2.5 py-1.5 rounded-xl bg-teal-950/80 hover:bg-teal-900 border border-teal-800/70 text-teal-300 text-[11px] font-bold transition cursor-pointer"
+              >
+                Resident
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickFill('security@apartment.com')}
+                className="px-2.5 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-750 border border-slate-700 text-slate-300 text-[11px] font-bold transition cursor-pointer"
+              >
+                Security Desk
+              </button>
+            </div>
+          </div>
         </div>
 
-        {/* First-time Setup Alert */}
-        {setupRequired && step === 1 && (
-          <div className="p-4 bg-brand-950/80 border border-brand-800/80 rounded-2xl text-xs text-brand-200 flex flex-col gap-2 animate-in fade-in">
-            <div className="flex items-center gap-2 font-bold text-white">
-              <Shield size={16} className="text-brand-400 shrink-0" />
-              <span>Initial Setup Required</span>
-            </div>
-            <p className="text-[11px] text-slate-300">
-              No Super Admin detected in the database. Initialize your master account to start.
-            </p>
-            <Link
-              to="/setup"
-              className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl text-xs transition mt-1"
-            >
-              <span>Setup Root Super Admin</span>
-              <ArrowRight size={13} />
-            </Link>
-          </div>
-        )}
-
-        {/* Error Banner */}
-        {error && (
-          <div className="p-3 bg-red-950/70 border border-red-800/60 rounded-2xl text-red-200 text-xs flex items-center gap-2 animate-in fade-in">
-            <AlertCircle size={15} className="text-red-400 shrink-0" />
-            <span>{error}</span>
-          </div>
-        )}
-
-        {/* Resend Success Banner */}
-        {resendMsg && (
-          <div className="p-3 bg-emerald-950/70 border border-emerald-800/60 rounded-2xl text-emerald-200 text-xs flex items-center gap-2 animate-in fade-in">
-            <CheckCircle2 size={15} className="text-emerald-400 shrink-0" />
-            <span>{resendMsg}</span>
-          </div>
-        )}
-
-        {/* STEP 1: CREDENTIALS FORM */}
-        {step === 1 && (
-          <form onSubmit={handleCredentialsSubmit} className="space-y-4 text-xs">
+        {/* Right Side: Auth Form Container */}
+        <div className="lg:col-span-6 w-full max-w-md mx-auto">
+          <div className="bg-slate-900/90 backdrop-blur-2xl border border-slate-800/90 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+            
+            {/* Header */}
             <div>
-              <label className="block text-slate-300 font-semibold mb-1">
-                Email, Mobile, or Registration ID *
-              </label>
-              <div className="relative">
-                <Mail size={15} className="absolute left-3.5 top-3 text-slate-500" />
-                <input
-                  type="text"
-                  required
-                  placeholder="admin@apartment.com or REG-2026-XXXXXX"
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-10 pr-3 py-2.5 text-white focus:outline-none focus:border-brand-500"
-                />
+              <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center mb-3 shadow-lg shadow-brand-500/25 border border-white/10 lg:hidden">
+                <Building2 size={22} />
               </div>
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-brand-400">
+                {step === 1 ? 'Apartment Portal' : 'Two-Factor Authentication'}
+              </span>
+              <h2 className="text-xl sm:text-2xl font-black text-white mt-1">
+                {step === 1 ? 'Sign In to Your Account' : 'Verify Login OTP'}
+              </h2>
+              <p className="text-xs text-slate-400 mt-1">
+                {step === 1
+                  ? 'Enter your credentials to access your assigned role portal.'
+                  : `Dispatched a 6-digit code to ${maskedEmail}`}
+              </p>
             </div>
 
-            <div>
-              <div className="flex items-center justify-between mb-1">
-                <label className="text-slate-300 font-semibold">Password *</label>
-                <Link to="/forgot-password" tabIndex={-1} className="text-brand-400 hover:text-brand-300 text-[11px]">
-                  Forgot Password?
+            {/* Initial Setup Alert */}
+            {setupRequired && step === 1 && (
+              <div className="p-4 bg-brand-950/80 border border-brand-800/80 rounded-2xl text-xs text-brand-200 flex flex-col gap-2 animate-in fade-in">
+                <div className="flex items-center gap-2 font-bold text-white">
+                  <Shield size={16} className="text-brand-400 shrink-0" />
+                  <span>Initial Setup Required</span>
+                </div>
+                <p className="text-[11px] text-slate-300">
+                  No Super Admin detected in the database. Initialize your master account to start.
+                </p>
+                <Link
+                  to="/setup"
+                  className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl text-xs transition mt-1"
+                >
+                  <span>Setup Root Super Admin</span>
+                  <ArrowRight size={13} />
                 </Link>
               </div>
-              <div className="relative">
-                <Lock size={15} className="absolute left-3.5 top-3 text-slate-500" />
-                <input
-                  type="password"
-                  required
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-xl pl-10 pr-3 py-2.5 text-white focus:outline-none focus:border-brand-500"
-                />
+            )}
+
+            {/* Error Banner */}
+            {error && (
+              <div className="p-3.5 bg-red-950/70 border border-red-800/60 rounded-2xl text-red-200 text-xs flex items-center gap-2.5 animate-in fade-in">
+                <AlertCircle size={16} className="text-red-400 shrink-0" />
+                <span>{error}</span>
               </div>
-            </div>
+            )}
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 bg-brand-600 hover:bg-brand-500 text-white font-extrabold text-xs rounded-2xl transition flex items-center justify-center gap-2 shadow-lg shadow-brand-600/30 cursor-pointer disabled:opacity-50 mt-2"
-            >
-              {loading ? (
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              ) : (
-                <>
-                  <span>Sign In with 2FA</span>
-                  <ArrowRight size={15} />
-                </>
-              )}
-            </button>
-          </form>
-        )}
-
-        {/* STEP 2: 2FA 6-DIGIT OTP FORM */}
-        {step === 2 && (
-          <form onSubmit={handleOtpSubmit} className="space-y-5 text-xs animate-in fade-in">
-            {/* Purpose Badge */}
-            <div className="p-3 bg-slate-800/80 rounded-2xl border border-slate-700/60 flex items-center justify-between">
-              <span className="text-[11px] text-slate-300 flex items-center gap-1.5 font-medium">
-                <ShieldCheck size={14} className="text-brand-400" />
-                <span>Purpose: Secure Login Verification</span>
-              </span>
-              <span className="text-[10px] uppercase font-bold text-brand-400 bg-brand-950 px-2 py-0.5 rounded-md border border-brand-800">
-                {userRole || '2FA'}
-              </span>
-            </div>
-
-            <div>
-              <div className="flex justify-center gap-2 sm:gap-2.5" onPaste={handlePaste}>
-                {otp.map((digit, idx) => (
-                  <input
-                    key={idx}
-                    ref={(el) => (inputRefs.current[idx] = el)}
-                    type="text"
-                    inputMode="numeric"
-                    maxLength={1}
-                    value={digit}
-                    onChange={(e) => handleOtpChange(idx, e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(idx, e)}
-                    className={`w-11 h-13 sm:w-12 sm:h-14 text-center text-xl font-mono font-extrabold rounded-2xl bg-slate-800 border transition focus:outline-none ${
-                      digit
-                        ? 'border-brand-500 text-white ring-2 ring-brand-500/20'
-                        : 'border-slate-700 text-slate-400 focus:border-brand-500'
-                    }`}
-                  />
-                ))}
+            {/* Resend Success Banner */}
+            {resendMsg && (
+              <div className="p-3.5 bg-emerald-950/70 border border-emerald-800/60 rounded-2xl text-emerald-200 text-xs flex items-center gap-2.5 animate-in fade-in">
+                <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+                <span>{resendMsg}</span>
               </div>
+            )}
 
-              {/* Expiry Timer */}
-              <div className="flex items-center justify-center gap-1.5 mt-4 text-xs">
-                <Clock size={14} className={otpExpirySeconds < 60 ? 'text-red-400' : 'text-slate-400'} />
-                <span className={otpExpirySeconds < 60 ? 'text-red-400 font-bold' : 'text-slate-400'}>
-                  OTP expires in: <strong className="font-mono text-slate-200">{formatTimer(otpExpirySeconds)}</strong>
-                </span>
+            {/* STEP 1: CREDENTIALS FORM */}
+            {step === 1 && (
+              <form onSubmit={handleCredentialsSubmit} className="space-y-4 text-xs">
+                <div>
+                  <label className="block text-slate-300 font-bold mb-1.5">
+                    Email, Mobile, or Registration ID *
+                  </label>
+                  <div className="relative">
+                    <Mail size={15} className="absolute left-3.5 top-3 text-slate-500" />
+                    <input
+                      type="text"
+                      required
+                      placeholder="admin@apartment.com or REG-2026-XXXXXX"
+                      value={identifier}
+                      onChange={(e) => setIdentifier(e.target.value)}
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-3.5 py-2.5 text-white font-medium placeholder-slate-500 focus:outline-none focus:border-brand-500 transition"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="text-slate-300 font-bold">Password *</label>
+                    <Link to="/forgot-password" tabIndex={-1} className="text-brand-400 hover:text-brand-300 font-semibold text-[11px] transition">
+                      Forgot Password?
+                    </Link>
+                  </div>
+                  <div className="relative">
+                    <Lock size={15} className="absolute left-3.5 top-3 text-slate-500" />
+                    <input
+                      type="password"
+                      required
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-3.5 py-2.5 text-white font-medium placeholder-slate-500 focus:outline-none focus:border-brand-500 transition"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-3 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-extrabold text-xs rounded-2xl transition flex items-center justify-center gap-2 shadow-lg shadow-brand-600/30 cursor-pointer disabled:opacity-50 mt-3 border border-brand-400/20"
+                >
+                  {loading ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <>
+                      <span>Sign In with 2FA</span>
+                      <ArrowRight size={15} />
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
+
+            {/* STEP 2: 2FA 6-DIGIT OTP FORM */}
+            {step === 2 && (
+              <form onSubmit={handleOtpSubmit} className="space-y-5 text-xs animate-in fade-in">
+                <div className="p-3 bg-slate-950/80 rounded-2xl border border-slate-800 flex items-center justify-between">
+                  <span className="text-[11px] text-slate-300 flex items-center gap-1.5 font-medium">
+                    <ShieldCheck size={14} className="text-brand-400" />
+                    <span>Purpose: Secure Login</span>
+                  </span>
+                  <span className="text-[10px] uppercase font-bold text-brand-400 bg-brand-950 px-2 py-0.5 rounded-md border border-brand-800">
+                    {userRole || '2FA'}
+                  </span>
+                </div>
+
+                <div>
+                  <div className="flex justify-center gap-2 sm:gap-2.5" onPaste={handlePaste}>
+                    {otp.map((digit, idx) => (
+                      <input
+                        key={idx}
+                        ref={(el) => (inputRefs.current[idx] = el)}
+                        type="text"
+                        inputMode="numeric"
+                        maxLength={1}
+                        value={digit}
+                        onChange={(e) => handleOtpChange(idx, e.target.value)}
+                        onKeyDown={(e) => handleKeyDown(idx, e)}
+                        className={`w-11 h-13 sm:w-12 sm:h-14 text-center text-xl font-mono font-extrabold rounded-2xl bg-slate-950 border transition focus:outline-none ${
+                          digit
+                            ? 'border-brand-500 text-white ring-2 ring-brand-500/20'
+                            : 'border-slate-800 text-slate-400 focus:border-brand-500'
+                        }`}
+                      />
+                    ))}
+                  </div>
+
+                  <div className="flex items-center justify-center gap-1.5 mt-4 text-xs">
+                    <Clock size={14} className={otpExpirySeconds < 60 ? 'text-red-400' : 'text-slate-400'} />
+                    <span className={otpExpirySeconds < 60 ? 'text-red-400 font-bold' : 'text-slate-400'}>
+                      OTP expires in: <strong className="font-mono text-slate-200">{formatTimer(otpExpirySeconds)}</strong>
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading || otp.join('').length !== 6 || otpExpirySeconds <= 0}
+                  className="w-full py-3 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-extrabold text-xs rounded-2xl transition flex items-center justify-center gap-2 shadow-lg shadow-brand-600/30 cursor-pointer disabled:opacity-40 border border-brand-400/20"
+                >
+                  {loading ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <>
+                      <span>Verify OTP &amp; Access Dashboard</span>
+                      <ArrowRight size={15} />
+                    </>
+                  )}
+                </button>
+
+                <div className="pt-2 flex items-center justify-between text-xs border-t border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setStep(1)}
+                    className="inline-flex items-center gap-1 text-slate-400 hover:text-white transition cursor-pointer"
+                  >
+                    <ArrowLeft size={13} />
+                    <span>Back</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleResend}
+                    disabled={resendCooldown > 0 || loading}
+                    className="inline-flex items-center gap-1 text-brand-400 hover:text-brand-300 font-bold disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+                  >
+                    <RotateCw size={12} className={loading ? 'animate-spin' : ''} />
+                    <span>
+                      {resendCooldown > 0
+                        ? `Resend in ${resendCooldown}s`
+                        : 'Resend OTP'}
+                    </span>
+                  </button>
+                </div>
+              </form>
+            )}
+
+            {/* Footer Link */}
+            {step === 1 && (
+              <div className="text-center pt-2 text-xs text-slate-400 border-t border-slate-800/80">
+                <span>New resident? </span>
+                <Link to="/register" className="text-brand-400 font-bold hover:underline">
+                  Self-Register Online &rarr;
+                </Link>
               </div>
-            </div>
+            )}
 
-            <button
-              type="submit"
-              disabled={loading || otp.join('').length !== 6 || otpExpirySeconds <= 0}
-              className="w-full py-3 bg-brand-600 hover:bg-brand-500 text-white font-extrabold text-xs rounded-2xl transition flex items-center justify-center gap-2 shadow-lg shadow-brand-600/30 cursor-pointer disabled:opacity-40"
-            >
-              {loading ? (
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              ) : (
-                <>
-                  <span>Verify OTP &amp; Access Dashboard</span>
-                  <ArrowRight size={15} />
-                </>
-              )}
-            </button>
-
-            <div className="pt-2 flex items-center justify-between text-xs border-t border-slate-800">
-              <button
-                type="button"
-                onClick={() => setStep(1)}
-                className="inline-flex items-center gap-1 text-slate-400 hover:text-white transition cursor-pointer"
-              >
-                <ArrowLeft size={13} />
-                <span>Back</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={handleResend}
-                disabled={resendCooldown > 0 || loading}
-                className="inline-flex items-center gap-1 text-brand-400 hover:text-brand-300 font-bold disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
-              >
-                <RotateCw size={12} className={loading ? 'animate-spin' : ''} />
-                <span>
-                  {resendCooldown > 0
-                    ? `Resend in ${resendCooldown}s`
-                    : 'Resend OTP'}
-                </span>
-              </button>
-            </div>
-          </form>
-        )}
-
-        {/* Footer Link */}
-        {step === 1 && (
-          <div className="text-center pt-2 text-xs text-slate-400">
-            <span>New resident? </span>
-            <Link to="/register" className="text-brand-400 font-bold hover:underline">
-              Self-Register Online &rarr;
-            </Link>
           </div>
-        )}
+        </div>
 
       </div>
     </div>

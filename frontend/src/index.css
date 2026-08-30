@@ -6,11 +6,23 @@
   body {
     @apply bg-slate-950 text-slate-100 selection:bg-brand-500 selection:text-white min-h-screen font-sans antialiased;
     background-image: 
-      radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
-      radial-gradient(at 50% 100%, rgba(99, 102, 241, 0.05) 0px, transparent 50%);
+      radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, rgba(99, 102, 241, 0.08) 0px, transparent 50%);
     background-attachment: fixed;
   }
+}
+
+/* Chrome / Safari / Edge Autofill Dark Styling Fix */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 40px #0f172a inset !important;
+  -webkit-text-fill-color: #f8fafc !important;
+  caret-color: #f8fafc !important;
+  border-radius: inherit !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 
 /* Custom Glassmorphic Utilities */
@@ -36,15 +48,15 @@
 }
 
 .glass-input {
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: #f8fafc;
   transition: all 0.15s ease-in-out;
 }
 
 .glass-input:focus {
   border-color: #6366f1;
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
   outline: none;
 }
 
@@ -87,7 +99,7 @@
 }
 
 .badge-overdue-1-10 {
-  @apply bg-orange-950/80 text-orange-300 border border-orange-700/70 font-bold shadow-xs;
+  @apply bg-orange-950/80 text-orange-300 border border-orange-700/70 font-bold shadow-sm;
 }
 
 .badge-overdue-10-plus {
