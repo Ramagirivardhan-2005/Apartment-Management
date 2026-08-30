@@ -1,10 +1,47 @@
-# 🏢 Enterprise Apartment Management System (RBAC Suite)
+# 🏢 Apartment Management System
 
-A modern, full-stack, secure, role-based **Apartment Management System** built with **React (Vite + Tailwind CSS)** and **Node.js (Express + MongoDB + Mongoose + JWT + Cloudinary + Nodemailer + Razorpay)**.
+A full-stack **Apartment Management System** designed to digitize and simplify the day-to-day management of residential communities. The platform provides a centralized solution for **residents, administrators, security personnel, and apartment service providers** to manage apartment-related activities efficiently.
 
 ---
 
-## 🌟 5 Primary Roles & Credentials
+### 🚀 Features
+
+* 👥 **Resident and apartment management**
+* 🔐 **Secure authentication and role-based authorization**
+* 🚪 **Visitor and security management**
+* 📅 **Amenity, room, and slot booking**
+* 📝 **Complaint and issue management**
+* 📢 **Notices, announcements, and notifications**
+* 💳 **Online maintenance and service payments**
+* 🏪 **Apartment shop and service management**
+* 🎟️ **Promocodes and offers**
+* 📧 **Email notifications using SMTP/Nodemailer**
+* ⚡ **Redis-based caching and performance optimization**
+* 💰 **Razorpay payment gateway integration**
+* 📱 **Responsive and user-friendly dashboard**
+
+---
+
+### 🛠️ Tech Stack
+
+* **Frontend:** React.js, JavaScript, HTML, CSS, Tailwind CSS, Lucide Icons, Vite
+* **Backend:** Node.js, Express.js
+* **Database:** MongoDB & Mongoose
+* **Authentication:** JWT, SHA-256 Hashed OTPs & bcrypt
+* **Caching:** Redis
+* **Payment Gateway:** Razorpay
+* **Email Service:** SMTP + Nodemailer
+* **Storage:** Cloudinary
+
+---
+
+### 🎯 Objective
+
+The primary objective of this project is to replace manual apartment management processes with a **secure, scalable, and centralized digital platform**, improving communication between residents and management while simplifying bookings, complaints, payments, and other community services.
+
+---
+
+## 🌟 5 Primary Roles & Demo Credentials
 
 All demo accounts come pre-configured with the default password: `Password123!`
 
