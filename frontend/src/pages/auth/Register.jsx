@@ -93,8 +93,8 @@ const Register = () => {
 
       <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center relative z-10">
         
-        {/* Left Side: Apartment Community Showcase */}
-        <div className="lg:col-span-6 space-y-6">
+        {/* Left Side: Apartment Community Showcase with Auto-Playing Video */}
+        <div className="lg:col-span-6 space-y-5">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center shadow-xl shadow-brand-500/30 border border-white/20">
               <Building2 size={26} />
@@ -114,56 +114,73 @@ const Register = () => {
             </div>
           </div>
 
-          {/* Complex Info Box */}
-          <div className="p-5 bg-slate-900/80 backdrop-blur-xl rounded-3xl border border-slate-800/90 shadow-xl space-y-2">
-            <h2 className="text-sm font-extrabold text-white flex items-center gap-2">
-              <Sparkles size={16} className="text-brand-400" />
-              <span>Premium Living &amp; Family Community</span>
-            </h2>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              Become a verified resident of Vijaya Laxmi Complex and experience upscale gated living. Enjoy spacious, well-ventilated flats, 24/7 guarded security, lush green landscaped gardens, 100% power backup, and a warm family-friendly neighborhood.
-            </p>
+          {/* Auto-Playing Hero Video Container */}
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-800/90 aspect-video sm:aspect-16/9 bg-slate-950 group">
+            <video
+              src="/videos/hero_video.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              onEnded={(e) => e.target.play()}
+              className="w-full h-full object-cover"
+            />
+            {/* Ambient overlay gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/25 to-transparent pointer-events-none"></div>
+
+            {/* Video overlay badge and tagline */}
+            <div className="absolute bottom-4 left-4 right-4 text-white z-10">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span className="text-[11px] font-extrabold uppercase tracking-wider text-emerald-300">
+                  Vijaya Laxmi Complex Living
+                </span>
+              </div>
+              <p className="text-xs text-slate-200 font-medium">
+                Spacious sunlit apartments, 24/7 guarded security, and lush green family community.
+              </p>
+            </div>
           </div>
 
           {/* Resident Feature Highlights */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="p-3.5 bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-3 hover:border-brand-500/40 transition">
-              <div className="w-9 h-9 rounded-xl bg-brand-500/20 text-brand-400 border border-brand-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                <DoorClosed size={18} />
+            <div className="p-3 bg-slate-900/75 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-2.5 hover:border-brand-500/40 transition shadow-lg">
+              <div className="w-8 h-8 rounded-xl bg-brand-500/20 text-brand-400 border border-brand-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                <DoorClosed size={16} />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-white">Spacious &amp; Sunlit Flats</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">Contemporary architecture with expansive balconies and optimal natural lighting.</p>
+                <h4 className="text-xs font-bold text-white">Spacious Flats</h4>
+                <p className="text-[11px] text-slate-400">Expansive balconies &amp; natural sunlight.</p>
               </div>
             </div>
 
-            <div className="p-3.5 bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-3 hover:border-brand-500/40 transition">
-              <div className="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                <ShieldCheck size={18} />
+            <div className="p-3 bg-slate-900/75 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-2.5 hover:border-brand-500/40 transition shadow-lg">
+              <div className="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                <ShieldCheck size={16} />
               </div>
               <div>
                 <h4 className="text-xs font-bold text-white">Safe Gated Enclave</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">Round-the-clock security staff, HD CCTV coverage, and safe pedestrian walkways.</p>
+                <p className="text-[11px] text-slate-400">24/7 manned security &amp; CCTV coverage.</p>
               </div>
             </div>
 
-            <div className="p-3.5 bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-3 hover:border-brand-500/40 transition">
-              <div className="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                <Car size={18} />
+            <div className="p-3 bg-slate-900/75 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-2.5 hover:border-brand-500/40 transition shadow-lg">
+              <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                <Car size={16} />
               </div>
               <div>
                 <h4 className="text-xs font-bold text-white">Sheltered Parking</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">Dedicated two-wheeler and four-wheeler covered parking bays with EV charge points.</p>
+                <p className="text-[11px] text-slate-400">Covered parking with EV charge points.</p>
               </div>
             </div>
 
-            <div className="p-3.5 bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-3 hover:border-brand-500/40 transition">
-              <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                <Sparkles size={18} />
+            <div className="p-3 bg-slate-900/75 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-2.5 hover:border-brand-500/40 transition shadow-lg">
+              <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                <Sparkles size={16} />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-white">Lush Gardens &amp; Club</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">Central park, morning jogging tracks, children's play area, and fitness gym.</p>
+                <h4 className="text-xs font-bold text-white">Lush Gardens</h4>
+                <p className="text-[11px] text-slate-400">Park, jog tracks, and fitness gym.</p>
               </div>
             </div>
           </div>

@@ -257,8 +257,8 @@ const Login = () => {
 
       <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center relative z-10">
         
-        {/* Left Side: Apartment Management System Showcase */}
-        <div className="lg:col-span-7 space-y-6">
+        {/* Left Side: Apartment Showcase with Auto-Playing Video */}
+        <div className="lg:col-span-7 space-y-5">
           {/* Brand Header */}
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center shadow-xl shadow-brand-500/30 border border-white/20">
@@ -279,56 +279,73 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Complex Lifestyle & Community Description */}
-          <div className="p-5 bg-slate-900/80 backdrop-blur-xl rounded-3xl border border-slate-800/90 shadow-xl space-y-2">
-            <h2 className="text-sm font-extrabold text-white flex items-center gap-2">
-              <Sparkles size={16} className="text-brand-400" />
-              <span>Living at Vijaya Laxmi Complex</span>
-            </h2>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              A thoughtfully planned luxury residential enclave designed for peaceful family living, contemporary elegance, and complete peace of mind. Featuring beautifully landscaped green gardens, 24/7 guarded security, robust infrastructure, and premium lifestyle amenities.
-            </p>
+          {/* Auto-Playing Hero Video Container */}
+          <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-800/90 aspect-video sm:aspect-16/9 bg-slate-950 group">
+            <video
+              src="/videos/hero_video.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              onEnded={(e) => e.target.play()}
+              className="w-full h-full object-cover"
+            />
+            {/* Ambient overlay gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/25 to-transparent pointer-events-none"></div>
+
+            {/* Video overlay badge and tagline */}
+            <div className="absolute bottom-4 left-4 right-4 text-white z-10">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span className="text-[11px] font-extrabold uppercase tracking-wider text-emerald-300">
+                  Vijaya Laxmi Complex Campus
+                </span>
+              </div>
+              <p className="text-xs text-slate-200 font-medium">
+                Experience serene residential luxury, lush landscaped gardens, and 24/7 guarded security.
+              </p>
+            </div>
           </div>
 
           {/* Key Apartment Amenities Highlights */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="p-3.5 bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-3 hover:border-brand-500/40 transition">
-              <div className="w-9 h-9 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                <ShieldCheck size={18} />
+            <div className="p-3 bg-slate-900/75 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-2.5 hover:border-brand-500/40 transition shadow-lg">
+              <div className="w-8 h-8 rounded-xl bg-purple-500/20 text-purple-400 border border-purple-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                <ShieldCheck size={16} />
               </div>
               <div>
                 <h4 className="text-xs font-bold text-white">24/7 Security &amp; CCTV</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">Manned security gates, smart visitor tracking, and round-the-clock CCTV surveillance.</p>
+                <p className="text-[11px] text-slate-400">Guarded entry and round-the-clock HD CCTV surveillance.</p>
               </div>
             </div>
 
-            <div className="p-3.5 bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-3 hover:border-brand-500/40 transition">
-              <div className="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                <Sparkles size={18} />
+            <div className="p-3 bg-slate-900/75 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-2.5 hover:border-brand-500/40 transition shadow-lg">
+              <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                <Sparkles size={16} />
               </div>
               <div>
                 <h4 className="text-xs font-bold text-white">100% Power &amp; Water Backup</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">Continuous power backup for lifts and flats, dual RO water supply &amp; rainwater harvest.</p>
+                <p className="text-[11px] text-slate-400">Uninterrupted power generator and dual RO water supply.</p>
               </div>
             </div>
 
-            <div className="p-3.5 bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-3 hover:border-brand-500/40 transition">
-              <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                <Layers size={18} />
+            <div className="p-3 bg-slate-900/75 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-2.5 hover:border-brand-500/40 transition shadow-lg">
+              <div className="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                <Layers size={16} />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-white">Lush Greenery &amp; Kids Park</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">Landscaped central park, morning jogging tracks, and safe dedicated children play zones.</p>
+                <h4 className="text-xs font-bold text-white">Lush Greenery &amp; Park</h4>
+                <p className="text-[11px] text-slate-400">Jogging track, children park, and landscaped lawns.</p>
               </div>
             </div>
 
-            <div className="p-3.5 bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-3 hover:border-brand-500/40 transition">
-              <div className="w-9 h-9 rounded-xl bg-brand-500/20 text-brand-400 border border-brand-500/30 flex items-center justify-center shrink-0 mt-0.5">
-                <Building2 size={18} />
+            <div className="p-3 bg-slate-900/75 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-2.5 hover:border-brand-500/40 transition shadow-lg">
+              <div className="w-8 h-8 rounded-xl bg-brand-500/20 text-brand-400 border border-brand-500/30 flex items-center justify-center shrink-0 mt-0.5">
+                <Building2 size={16} />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-white">Clubhouse, Gym &amp; Hall</h4>
-                <p className="text-[11px] text-slate-400 mt-0.5">Modern fitness gym, indoor recreation hall, and resident party &amp; celebration hall.</p>
+                <h4 className="text-xs font-bold text-white">Clubhouse &amp; Gym</h4>
+                <p className="text-[11px] text-slate-400">Modern fitness center, games hall, and party hall.</p>
               </div>
             </div>
           </div>

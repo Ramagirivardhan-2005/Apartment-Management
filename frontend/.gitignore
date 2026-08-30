@@ -3,3 +3,9 @@
 node_modules/
 dist/
 *.log
+*.mp4
+*.mov
+*.webm
+*.avi
+*.mkv
+public/videos/
