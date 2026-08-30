@@ -2,16 +2,45 @@ import 'dotenv/config';
 import nodemailer from 'nodemailer';
 
 const getTransporter = () => {
-  const smtpUser = process.env.SMTP_USER || 'vardhanramagiri84@gmail.com';
-  const smtpPass = (process.env.SMTP_PASSWORD || process.env.SMTP_PASS || 'ygxueosmpjsxryxi').replace(/\s+/g, '');
+  const smtpPass = (
+    process.env.BREVO_SMTP_KEY ||
+    process.env.BREVO_API_KEY ||
+    process.env.SMTP_PASSWORD ||
+    process.env.SMTP_PASS ||
+    'ygxueosmpjsxryxi'
+  ).replace(/\s+/g, '');
 
+  const isBrevo = smtpPass.startsWith('xsmtpsib-') || process.env.SMTP_HOST?.includes('brevo');
+
+  if (isBrevo) {
+    const smtpUser = process.env.BREVO_USER || process.env.SMTP_USER || 'vardhanramagiri84@gmail.com';
+    const smtpPort = parseInt(process.env.SMTP_PORT, 10) || 587;
+    return nodemailer.createTransport({
+      host: process.env.SMTP_HOST || 'smtp-relay.brevo.com',
+      port: smtpPort,
+      secure: smtpPort === 465,
+      connectionTimeout: 8000,
+      greetingTimeout: 8000,
+      socketTimeout: 8000,
+      auth: {
+        user: smtpUser,
+        pass: smtpPass,
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+  }
+
+  // Gmail SMTP
+  const smtpUser = process.env.SMTP_USER || 'vardhanramagiri84@gmail.com';
   return nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
     secure: true,
-    connectionTimeout: 4000,
-    greetingTimeout: 4000,
-    socketTimeout: 4000,
+    connectionTimeout: 8000,
+    greetingTimeout: 8000,
+    socketTimeout: 8000,
     auth: {
       user: smtpUser,
       pass: smtpPass,
@@ -23,16 +52,16 @@ const getTransporter = () => {
 };
 
 /**
- * Universal email dispatcher (Supports Resend API, Brevo API, and SMTP)
+ * Universal email dispatcher (Supports Resend API, Brevo API, Brevo SMTP, and Gmail SMTP)
  * @param {Object} options - { to, subject, html, text }
  */
 export const sendEmail = async ({ to, subject, html, text }) => {
   const fromName = process.env.SMTP_FROM_NAME || 'Vijaya Laxmi Complex';
   const fromEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || 'vardhanramagiri84@gmail.com';
 
-  // 1. Brevo HTTP REST API (HTTPS port 443 - 100% open & works universally on Render)
+  // 1. Brevo HTTP REST API (if key starts with xkeysib-)
   const brevoKey = process.env.BREVO_API_KEY;
-  if (brevoKey) {
+  if (brevoKey && !brevoKey.startsWith('xsmtpsib-')) {
     try {
       const res = await fetch('https://api.brevo.com/v3/smtp/email', {
         method: 'POST',
@@ -51,9 +80,9 @@ export const sendEmail = async ({ to, subject, html, text }) => {
       const data = await res.json();
       if (res.ok) {
         console.log(`\n====================================================\n✅ [Brevo HTTP API Email Delivered Successfully]\nTo: ${to}\nSubject: ${subject}\nMessage ID: ${data.messageId}\n====================================================\n`);
-        return { success: true, messageId: data.messageId };
+        return { success: true, provider: 'brevo_api', messageId: data.messageId };
       } else {
-        console.warn('Brevo API Response:', data);
+        console.warn('Brevo API Warning:', data);
       }
     } catch (err) {
       console.warn('Brevo HTTP API Error:', err.message);
@@ -81,7 +110,7 @@ export const sendEmail = async ({ to, subject, html, text }) => {
       const data = await res.json();
       if (res.ok) {
         console.log(`\n====================================================\n✅ [Resend HTTP API Email Delivered]\nTo: ${to}\nSubject: ${subject}\nResend ID: ${data.id}\n====================================================\n`);
-        return { success: true, id: data.id };
+        return { success: true, provider: 'resend_api', id: data.id };
       } else {
         console.warn('Resend API Warning:', data);
       }
@@ -90,7 +119,7 @@ export const sendEmail = async ({ to, subject, html, text }) => {
     }
   }
 
-  // 3. Nodemailer SMTP (Works seamlessly on localhost / unrestricted servers)
+  // 3. Nodemailer SMTP (Brevo Relay or Gmail SMTP)
   try {
     const mailOptions = {
       from: `"${fromName}" <${fromEmail}>`,
@@ -102,16 +131,16 @@ export const sendEmail = async ({ to, subject, html, text }) => {
 
     const transporter = getTransporter();
     
-    // Dispatch in background
+    // Dispatch
     transporter.sendMail(mailOptions)
       .then((info) => {
         console.log(`\n====================================================\n✅ [SMTP Email Delivered Successfully]\nTo: ${to}\nSubject: ${subject}\nMessageId: ${info.messageId}\n====================================================\n`);
       })
       .catch((err) => {
-        console.warn(`\n⚠️ [SMTP Port Notice] Outbound SMTP port was blocked by cloud host firewall (${err.message}). Set RESEND_API_KEY or BREVO_API_KEY in Render environment to send live emails over HTTPS.\n`);
+        console.warn(`\n⚠️ [SMTP Notice] SMTP delivery failed (${err.message}). If on Render free tier, set BREVO_API_KEY (starting with xkeysib-) or RESEND_API_KEY in Render environment to send over HTTPS port 443.\n`);
       });
 
-    return { success: true };
+    return { success: true, provider: 'smtp' };
   } catch (error) {
     console.error(`\n❌ [SMTP Setup Warning] To: ${to} | Error: ${error.message}\n`);
     return { success: false, error: error.message };
