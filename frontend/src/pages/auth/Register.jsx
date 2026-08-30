@@ -86,29 +86,29 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4 sm:p-6 lg:p-12 relative overflow-hidden">
+    <div className="min-h-screen bg-transparent flex items-center justify-center p-4 sm:p-6 lg:p-12 relative overflow-hidden">
       {/* Background ambient lighting */}
-      <div className="absolute -top-40 -left-40 w-96 h-96 bg-brand-600/15 rounded-full blur-3xl pointer-events-none"></div>
-      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none"></div>
 
       <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center relative z-10">
         
         {/* Left Side: Apartment Community Showcase */}
         <div className="lg:col-span-6 space-y-6">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-500 text-white flex items-center justify-center shadow-xl shadow-brand-500/30 border border-white/20">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center shadow-xl shadow-brand-500/30 border border-white/20">
               <Building2 size={26} />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[11px] font-extrabold uppercase tracking-widest text-brand-400">
+                <span className="text-[11px] font-extrabold uppercase tracking-widest text-brand-700 bg-brand-500/10 px-2 py-0.5 rounded-md border border-brand-500/20">
                   Residential Community
                 </span>
-                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-brand-500/20 text-brand-300 border border-brand-500/30">
+                <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-brand-600/15 text-brand-800 border border-brand-600/30">
                   Resident Registration
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mt-0.5">
                 Vijaya Laxmi Complex
               </h1>
             </div>
