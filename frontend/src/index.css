@@ -3,15 +3,18 @@
 @tailwind utilities;
 
 @layer base {
+  html, body, #root {
+    background-color: #070b14 !important;
+    color: #f8fafc;
+    min-height: 100vh;
+  }
+
   body {
-    @apply bg-slate-950 text-slate-100 selection:bg-brand-500 selection:text-white min-h-screen font-sans antialiased;
-    background-color: #070b14;
+    @apply selection:bg-brand-500 selection:text-white font-sans antialiased;
     background-image: 
-      radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
-      radial-gradient(at 50% 100%, rgba(79, 70, 229, 0.12) 0px, transparent 55%),
-      radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 100% 100%, 100% 100%, 100% 100%, 28px 28px;
+      radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, rgba(79, 70, 229, 0.10) 0px, transparent 50%);
     background-attachment: fixed;
   }
 }
@@ -30,28 +33,28 @@ input:-webkit-autofill:active {
 
 /* Custom Glassmorphic Utilities */
 .glass-panel {
-  background: rgba(15, 23, 42, 0.75);
+  background: rgba(15, 23, 42, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.09);
 }
 
 .glass-card {
-  background: rgba(15, 23, 42, 0.65);
+  background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-card:hover {
-  background: rgba(30, 41, 59, 0.75);
-  border-color: rgba(99, 102, 241, 0.35);
-  box-shadow: 0 12px 35px -10px rgba(99, 102, 241, 0.25);
+  background: rgba(30, 41, 59, 0.85);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 12px 35px -10px rgba(99, 102, 241, 0.3);
 }
 
 .glass-input {
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(11, 17, 32, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: #f8fafc;
   transition: all 0.15s ease-in-out;
@@ -59,7 +62,7 @@ input:-webkit-autofill:active {
 
 .glass-input:focus {
   border-color: #6366f1;
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.35);
   outline: none;
 }
 
@@ -70,16 +73,16 @@ input:-webkit-autofill:active {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.5);
+  background: rgba(11, 17, 32, 0.8);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.4);
+  background: rgba(100, 116, 139, 0.5);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.6);
+  background: rgba(148, 163, 184, 0.7);
 }
 
 /* Glowing pulse animation */
@@ -94,15 +97,15 @@ input:-webkit-autofill:active {
 
 /* Overdue Badge Classes */
 .badge-due-soon {
-  @apply bg-blue-950/70 text-blue-300 border border-blue-800/60;
+  @apply bg-blue-950/80 text-blue-300 border border-blue-800/70;
 }
 
 .badge-due-today {
-  @apply bg-amber-950/70 text-amber-300 border border-amber-800/60 font-semibold;
+  @apply bg-amber-950/80 text-amber-300 border border-amber-800/70 font-semibold;
 }
 
 .badge-overdue-1-10 {
-  @apply bg-orange-950/80 text-orange-300 border border-orange-700/70 font-bold shadow-sm;
+  @apply bg-orange-950/85 text-orange-300 border border-orange-700/80 font-bold shadow-sm;
 }
 
 .badge-overdue-10-plus {

@@ -86,7 +86,11 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 lg:p-12 relative">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4 sm:p-6 lg:p-12 relative overflow-hidden">
+      {/* Background ambient lighting */}
+      <div className="absolute -top-40 -left-40 w-96 h-96 bg-brand-600/15 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute -bottom-40 -right-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
       <div className="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center relative z-10">
         
         {/* Left Side: Apartment Management System Resident Benefits Showcase */}
@@ -123,7 +127,7 @@ const Register = () => {
 
           {/* Resident Feature Highlights */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="p-3.5 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-slate-800/80 flex items-start gap-3 hover:border-brand-500/40 transition">
+            <div className="p-3.5 bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-3 hover:border-brand-500/40 transition">
               <div className="w-9 h-9 rounded-xl bg-brand-500/20 text-brand-400 border border-brand-500/30 flex items-center justify-center shrink-0 mt-0.5">
                 <DoorClosed size={18} />
               </div>
@@ -133,7 +137,7 @@ const Register = () => {
               </div>
             </div>
 
-            <div className="p-3.5 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-slate-800/80 flex items-start gap-3 hover:border-brand-500/40 transition">
+            <div className="p-3.5 bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-3 hover:border-brand-500/40 transition">
               <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shrink-0 mt-0.5">
                 <CreditCard size={18} />
               </div>
@@ -143,7 +147,7 @@ const Register = () => {
               </div>
             </div>
 
-            <div className="p-3.5 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-slate-800/80 flex items-start gap-3 hover:border-brand-500/40 transition">
+            <div className="p-3.5 bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-3 hover:border-brand-500/40 transition">
               <div className="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center shrink-0 mt-0.5">
                 <Car size={18} />
               </div>
@@ -153,7 +157,7 @@ const Register = () => {
               </div>
             </div>
 
-            <div className="p-3.5 bg-slate-900/60 backdrop-blur-md rounded-2xl border border-slate-800/80 flex items-start gap-3 hover:border-brand-500/40 transition">
+            <div className="p-3.5 bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 flex items-start gap-3 hover:border-brand-500/40 transition">
               <div className="w-9 h-9 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30 flex items-center justify-center shrink-0 mt-0.5">
                 <Megaphone size={18} />
               </div>
