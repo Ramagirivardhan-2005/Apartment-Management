@@ -30,7 +30,37 @@ export const sendEmail = async ({ to, subject, html, text }) => {
   const fromName = process.env.SMTP_FROM_NAME || 'Vijaya Laxmi Complex';
   const fromEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || 'vardhanramagiri84@gmail.com';
 
-  // 1. Resend HTTP REST API (HTTPS port 443 - 100% open & guaranteed on Render/Vercel)
+  // 1. Brevo HTTP REST API (HTTPS port 443 - 100% open & works universally on Render)
+  const brevoKey = process.env.BREVO_API_KEY;
+  if (brevoKey) {
+    try {
+      const res = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+          'api-key': brevoKey,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sender: { name: fromName, email: fromEmail },
+          to: [{ email: to }],
+          subject,
+          htmlContent: html,
+          textContent: text || subject,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        console.log(`\n====================================================\n✅ [Brevo HTTP API Email Delivered Successfully]\nTo: ${to}\nSubject: ${subject}\nMessage ID: ${data.messageId}\n====================================================\n`);
+        return { success: true, messageId: data.messageId };
+      } else {
+        console.warn('Brevo API Response:', data);
+      }
+    } catch (err) {
+      console.warn('Brevo HTTP API Error:', err.message);
+    }
+  }
+
+  // 2. Resend HTTP REST API (HTTPS port 443)
   if (process.env.RESEND_API_KEY) {
     try {
       const fromAddress = process.env.RESEND_FROM || `${fromName} <onboarding@resend.dev>`;
@@ -57,35 +87,6 @@ export const sendEmail = async ({ to, subject, html, text }) => {
       }
     } catch (err) {
       console.warn('Resend fetch error:', err.message);
-    }
-  }
-
-  // 2. Brevo HTTP REST API (HTTPS port 443 - 100% open & guaranteed on Render/Vercel)
-  if (process.env.BREVO_API_KEY) {
-    try {
-      const res = await fetch('https://api.brevo.com/v3/smtp/email', {
-        method: 'POST',
-        headers: {
-          'api-key': process.env.BREVO_API_KEY,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          sender: { name: fromName, email: fromEmail },
-          to: [{ email: to }],
-          subject,
-          htmlContent: html,
-          textContent: text || subject,
-        }),
-      });
-      const data = await res.json();
-      if (res.ok) {
-        console.log(`\n====================================================\n✅ [Brevo HTTP API Email Delivered]\nTo: ${to}\nSubject: ${subject}\nMessage ID: ${data.messageId}\n====================================================\n`);
-        return { success: true, messageId: data.messageId };
-      } else {
-        console.warn('Brevo API Warning:', data);
-      }
-    } catch (err) {
-      console.warn('Brevo fetch error:', err.message);
     }
   }
 
