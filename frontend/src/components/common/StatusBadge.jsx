@@ -7,8 +7,8 @@ const StatusBadge = ({ status, tier, label }) => {
   // Overdue / Payment Dues Color System
   if (normStatus === 'overdue_1_10' || normStatus === '1-10 days overdue') {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-orange-100 text-orange-800 border border-orange-300">
-        <span className="w-1.5 h-1.5 rounded-full bg-orange-500 mr-1.5"></span>
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold bg-orange-950/80 text-orange-300 border border-orange-700/70 shadow-xs shadow-orange-950/50">
+        <span className="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
         1-10 Days Overdue (Orange)
       </span>
     );
@@ -16,8 +16,8 @@ const StatusBadge = ({ status, tier, label }) => {
 
   if (normStatus === 'overdue_10_plus' || normStatus === '>10 days overdue') {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-800 border border-red-300 animate-pulse">
-        <span className="w-1.5 h-1.5 rounded-full bg-red-600 mr-1.5"></span>
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold bg-red-950/90 text-red-200 border border-red-700/80 shadow-md shadow-red-950/60 animate-soft-pulse">
+        <span className="w-1.5 h-1.5 rounded-full bg-red-400"></span>
         &gt;10 Days Overdue (Red)
       </span>
     );
@@ -25,8 +25,8 @@ const StatusBadge = ({ status, tier, label }) => {
 
   if (normStatus === 'critical' || normStatus === 'critical overdue') {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-rose-950 text-rose-100 border border-rose-800 shadow-sm">
-        <span className="w-1.5 h-1.5 rounded-full bg-rose-400 mr-1.5 animate-ping"></span>
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black bg-rose-950 text-rose-100 border border-rose-600 shadow-lg shadow-rose-950/80">
+        <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping"></span>
         CRITICAL OVERDUE (Dark Red)
       </span>
     );
@@ -34,7 +34,8 @@ const StatusBadge = ({ status, tier, label }) => {
 
   if (normStatus === 'due_today') {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-300">
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-950/80 text-amber-300 border border-amber-700/70">
+        <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
         Due Today
       </span>
     );
@@ -42,26 +43,26 @@ const StatusBadge = ({ status, tier, label }) => {
 
   if (normStatus === 'due_soon') {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-blue-950/80 text-blue-300 border border-blue-800/60">
+        <span className="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
         Due Soon
       </span>
     );
   }
 
-  // Room Status
-  if (normStatus === 'available') {
+  if (normStatus === 'paid' || normStatus === 'active' || normStatus === 'available') {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5"></span>
-        AVAILABLE
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold bg-emerald-950/80 text-emerald-300 border border-emerald-800/70 shadow-xs shadow-emerald-950/40">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+        {text.toUpperCase()}
       </span>
     );
   }
 
   if (normStatus === 'occupied') {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
-        <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1.5"></span>
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-indigo-950/80 text-indigo-300 border border-indigo-800/60">
+        <span className="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
         OCCUPIED
       </span>
     );
@@ -69,8 +70,8 @@ const StatusBadge = ({ status, tier, label }) => {
 
   if (normStatus === 'maintenance') {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-        <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5"></span>
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-950/80 text-amber-300 border border-amber-800/60">
+        <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
         MAINTENANCE
       </span>
     );
@@ -78,7 +79,8 @@ const StatusBadge = ({ status, tier, label }) => {
 
   if (normStatus === 'reserved') {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-purple-950/80 text-purple-300 border border-purple-800/60">
+        <span className="w-1.5 h-1.5 rounded-full bg-purple-400"></span>
         RESERVED
       </span>
     );
@@ -87,7 +89,8 @@ const StatusBadge = ({ status, tier, label }) => {
   // Complaint Status
   if (normStatus === 'new') {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-200">
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold bg-indigo-950/80 text-indigo-300 border border-indigo-700/70">
+        <span className="w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
         NEW
       </span>
     );
@@ -95,7 +98,8 @@ const StatusBadge = ({ status, tier, label }) => {
 
   if (normStatus === 'in_progress') {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-300">
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-950/80 text-amber-300 border border-amber-700/70">
+        <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
         IN PROGRESS
       </span>
     );
@@ -103,7 +107,8 @@ const StatusBadge = ({ status, tier, label }) => {
 
   if (normStatus === 'resolved') {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold bg-emerald-950/80 text-emerald-300 border border-emerald-700/70 shadow-xs">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
         RESOLVED
       </span>
     );
@@ -111,7 +116,8 @@ const StatusBadge = ({ status, tier, label }) => {
 
   if (normStatus === 'closed') {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200">
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium bg-slate-900 text-slate-400 border border-slate-800">
+        <span className="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
         CLOSED
       </span>
     );
@@ -120,8 +126,8 @@ const StatusBadge = ({ status, tier, label }) => {
   // Visitor Status
   if (normStatus === 'inside') {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 mr-1.5 animate-pulse"></span>
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-extrabold bg-emerald-950/90 text-emerald-300 border border-emerald-700 shadow-md shadow-emerald-950/50">
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
         INSIDE
       </span>
     );
@@ -129,7 +135,8 @@ const StatusBadge = ({ status, tier, label }) => {
 
   if (normStatus === 'checked_out') {
     return (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium bg-slate-900 text-slate-400 border border-slate-800">
+        <span className="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
         CHECKED OUT
       </span>
     );
@@ -137,7 +144,7 @@ const StatusBadge = ({ status, tier, label }) => {
 
   // General Status
   return (
-    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200 capitalize">
+    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-semibold bg-slate-850 text-slate-300 border border-slate-700/70 capitalize">
       {text}
     </span>
   );

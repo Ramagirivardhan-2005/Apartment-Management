@@ -4,46 +4,96 @@
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-800 selection:bg-brand-500 selection:text-white min-h-screen;
+    @apply bg-slate-950 text-slate-100 selection:bg-brand-500 selection:text-white min-h-screen font-sans antialiased;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+      radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, rgba(99, 102, 241, 0.05) 0px, transparent 50%);
+    background-attachment: fixed;
   }
 }
 
-/* Custom modern scrollbar */
+/* Custom Glassmorphic Utilities */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-card {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: rgba(30, 41, 59, 0.75);
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.2);
+}
+
+.glass-input {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+  transition: all 0.15s ease-in-out;
+}
+
+.glass-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+  outline: none;
+}
+
+/* Custom modern dark scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: rgba(15, 23, 42, 0.5);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
+  background: rgba(100, 116, 139, 0.4);
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: rgba(148, 163, 184, 0.6);
 }
 
-/* Custom Overdue Badges & Status Pulse */
+/* Glowing pulse animation */
+@keyframes soft-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.05); }
+}
+
+.animate-soft-pulse {
+  animation: soft-pulse 2s infinite ease-in-out;
+}
+
+/* Overdue Badge Classes */
 .badge-due-soon {
-  @apply bg-blue-50 text-blue-700 border border-blue-200;
+  @apply bg-blue-950/70 text-blue-300 border border-blue-800/60;
 }
 
 .badge-due-today {
-  @apply bg-amber-50 text-amber-700 border border-amber-300 font-semibold;
+  @apply bg-amber-950/70 text-amber-300 border border-amber-800/60 font-semibold;
 }
 
 .badge-overdue-1-10 {
-  @apply bg-orange-50 text-orange-700 border border-orange-300 font-bold;
+  @apply bg-orange-950/80 text-orange-300 border border-orange-700/70 font-bold shadow-xs;
 }
 
 .badge-overdue-10-plus {
-  @apply bg-red-50 text-red-700 border border-red-300 font-bold;
+  @apply bg-red-950/90 text-red-200 border border-red-700 font-bold shadow-sm shadow-red-950/50;
 }
 
 .badge-critical {
-  @apply bg-rose-950 text-rose-100 border border-rose-900 font-extrabold shadow-sm;
+  @apply bg-rose-950 text-rose-100 border border-rose-700 font-extrabold shadow-md shadow-rose-950/80;
 }
