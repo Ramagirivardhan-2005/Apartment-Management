@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-800 selection:bg-brand-500 selection:text-white min-h-screen;
+  }
+}
+
+/* Custom modern scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Custom Overdue Badges & Status Pulse */
+.badge-due-soon {
+  @apply bg-blue-50 text-blue-700 border border-blue-200;
+}
+
+.badge-due-today {
+  @apply bg-amber-50 text-amber-700 border border-amber-300 font-semibold;
+}
+
+.badge-overdue-1-10 {
+  @apply bg-orange-50 text-orange-700 border border-orange-300 font-bold;
+}
+
+.badge-overdue-10-plus {
+  @apply bg-red-50 text-red-700 border border-red-300 font-bold;
+}
+
+.badge-critical {
+  @apply bg-rose-950 text-rose-100 border border-rose-900 font-extrabold shadow-sm;
+}
