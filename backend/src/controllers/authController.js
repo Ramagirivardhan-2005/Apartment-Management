@@ -190,7 +190,6 @@ export const login = async (req, res, next) => {
       verificationToken,
       email: maskEmail(user.email),
       role: user.role,
-      otpPreview: rawOtp,
       message: 'A 6-digit login verification OTP has been dispatched to your registered email address.',
     });
   } catch (error) {
@@ -366,7 +365,6 @@ export const resendLoginOtp = async (req, res, next) => {
       success: true,
       message: 'New 6-digit login verification OTP sent to your registered email.',
       cooldownSeconds: 60,
-      otpPreview: rawOtp,
     });
   } catch (error) {
     next(error);
@@ -442,7 +440,6 @@ export const register = async (req, res, next) => {
       message: `Registration initiated. 6-digit OTP sent to ${user.email}. Please verify your email to activate your account.`,
       email: user.email,
       registrationId: user.registrationId,
-      otpPreview: rawOtp,
     });
   } catch (error) {
     next(error);
@@ -684,7 +681,6 @@ export const resendOtp = async (req, res, next) => {
       success: true,
       message: 'New 6-digit OTP dispatched to your registered email address.',
       cooldownSeconds: 60,
-      otpPreview: rawOtp,
     });
   } catch (error) {
     next(error);
@@ -817,9 +813,8 @@ export const forgotPassword = async (req, res, next) => {
 
     res.json({
       success: true,
-      message: `6-digit password reset OTP has been dispatched to ${user.email}.`,
+      message: `6-digit password reset OTP has been dispatched to ${user.email}. Please check your email.`,
       email: user.email,
-      otpPreview: rawOtp,
     });
   } catch (error) {
     next(error);

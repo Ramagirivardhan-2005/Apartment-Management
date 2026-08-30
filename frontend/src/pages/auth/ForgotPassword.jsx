@@ -88,13 +88,8 @@ const ForgotPassword = () => {
 
       if (res.data?.success) {
         setStep(2);
-        if (res.data.otpPreview) {
-          setOtp(String(res.data.otpPreview).split(''));
-          setSuccessMsg(`6-digit OTP dispatched to ${res.data.email || email}. (Code: ${res.data.otpPreview})`);
-        } else {
-          setOtp(['', '', '', '', '', '']);
-          setSuccessMsg(res.data.message || '6-digit OTP sent to your email.');
-        }
+        setOtp(['', '', '', '', '', '']);
+        setSuccessMsg(res.data.message || `6-digit OTP dispatched to ${res.data.email || email}. Please check your inbox.`);
         setOtpExpirySeconds(600);
         setResendCooldown(60);
       }
