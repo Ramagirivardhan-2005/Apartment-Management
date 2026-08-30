@@ -22,7 +22,9 @@ const VerifyOtp = () => {
   const initialEmail = queryParams.get('email') || location.state?.email || '';
 
   const [email, setEmail] = useState(initialEmail);
-  const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const initialOtpPreview = location.state?.otpPreview || queryParams.get('otp') || '';
+  const [otpPreview, setOtpPreview] = useState(initialOtpPreview);
+  const [otp, setOtp] = useState(initialOtpPreview ? String(initialOtpPreview).split('') : ['', '', '', '', '', '']);
   const inputRefs = useRef([]);
 
   // Timer states
@@ -222,7 +224,12 @@ const VerifyOtp = () => {
       });
 
       if (res.data?.success) {
-        setOtp(['', '', '', '', '', '']);
+        if (res.data.otpPreview) {
+          setOtpPreview(res.data.otpPreview);
+          setOtp(String(res.data.otpPreview).split(''));
+        } else {
+          setOtp(['', '', '', '', '', '']);
+        }
         setOtpExpirySeconds(600); // Reset to 10 minutes
         setResendCooldown(60); // Reset 60s cooldown
         setRemainingAttempts(null);
@@ -261,6 +268,22 @@ const VerifyOtp = () => {
         {/* STEP 1: OTP VERIFICATION */}
         {!isVerified ? (
           <div className="space-y-6">
+            {otpPreview && (
+              <div className="p-3.5 bg-brand-950/90 border border-brand-800 rounded-2xl text-brand-200 text-xs flex items-center justify-between animate-in fade-in shadow-lg">
+                <div className="flex items-center gap-2">
+                  <Sparkles size={16} className="text-brand-400 shrink-0 animate-pulse" />
+                  <span>OTP Code: <strong className="text-white font-mono text-sm tracking-widest bg-brand-900/80 px-2 py-0.5 rounded-lg border border-brand-700">{otpPreview}</strong></span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setOtp(String(otpPreview).split(''))}
+                  className="px-2.5 py-1 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-[11px] font-extrabold cursor-pointer transition shadow"
+                >
+                  Auto-Fill
+                </button>
+              </div>
+            )}
+
             <div className="text-center">
               <p className="text-xs text-slate-400">
                 Enter the 6-digit OTP sent to

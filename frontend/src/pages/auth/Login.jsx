@@ -39,6 +39,7 @@ const Login = () => {
   const [maskedEmail, setMaskedEmail] = useState('');
   const [userRole, setUserRole] = useState('');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
+  const [otpPreview, setOtpPreview] = useState('');
   const [otpExpirySeconds, setOtpExpirySeconds] = useState(600); // 10 minutes
   const [resendCooldown, setResendCooldown] = useState(60); // 60s cooldown
   const [resendMsg, setResendMsg] = useState('');
@@ -151,7 +152,12 @@ const Login = () => {
         setVerificationToken(res.verificationToken);
         setMaskedEmail(res.email);
         setUserRole(res.role);
-        setOtp(['', '', '', '', '', '']);
+        if (res.otpPreview) {
+          setOtpPreview(res.otpPreview);
+          setOtp(String(res.otpPreview).split(''));
+        } else {
+          setOtp(['', '', '', '', '', '']);
+        }
         setOtpExpirySeconds(600);
         setResendCooldown(60);
       } else {
@@ -232,7 +238,12 @@ const Login = () => {
     setLoading(false);
 
     if (res.success) {
-      setOtp(['', '', '', '', '', '']);
+      if (res.otpPreview) {
+        setOtpPreview(res.otpPreview);
+        setOtp(String(res.otpPreview).split(''));
+      } else {
+        setOtp(['', '', '', '', '', '']);
+      }
       setOtpExpirySeconds(600);
       setResendCooldown(60);
       setResendMsg('Fresh 6-digit login verification OTP sent.');
@@ -465,6 +476,22 @@ const Login = () => {
             {/* STEP 2: 2FA 6-DIGIT OTP FORM */}
             {step === 2 && (
               <form onSubmit={handleOtpSubmit} className="space-y-5 text-xs animate-in fade-in">
+                {otpPreview && (
+                  <div className="p-3 bg-brand-950/90 border border-brand-800 rounded-2xl text-brand-200 text-xs flex items-center justify-between animate-in fade-in shadow-lg">
+                    <div className="flex items-center gap-2">
+                      <Sparkles size={16} className="text-brand-400 shrink-0 animate-pulse" />
+                      <span>2FA OTP Code: <strong className="text-white font-mono text-sm tracking-widest bg-brand-900/80 px-2 py-0.5 rounded-lg border border-brand-700">{otpPreview}</strong></span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setOtp(String(otpPreview).split(''))}
+                      className="px-2.5 py-1 bg-brand-600 hover:bg-brand-500 text-white rounded-xl text-[11px] font-extrabold cursor-pointer transition shadow"
+                    >
+                      Auto-Fill
+                    </button>
+                  </div>
+                )}
+
                 <div className="p-3 bg-slate-950/80 rounded-2xl border border-slate-800 flex items-center justify-between">
                   <span className="text-[11px] text-slate-300 flex items-center gap-1.5 font-medium">
                     <ShieldCheck size={14} className="text-brand-400" />

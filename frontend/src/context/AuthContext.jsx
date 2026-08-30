@@ -53,6 +53,7 @@ export const AuthProvider = ({ children }) => {
           email: res.data.email,
           role: res.data.role,
           message: res.data.message,
+          otpPreview: res.data.otpPreview,
         };
       }
 

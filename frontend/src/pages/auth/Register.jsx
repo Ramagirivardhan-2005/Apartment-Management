@@ -74,6 +74,7 @@ const Register = () => {
           state: {
             email: formData.email,
             registrationId: res.data.registrationId,
+            otpPreview: res.data.otpPreview,
             message: 'A 6-digit verification code has been dispatched to your email. Please enter it below.',
           },
         });
