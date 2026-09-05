@@ -7,30 +7,38 @@ A production-ready, full-stack, enterprise-grade **Apartment Management System**
 ## 📑 Table of Contents
 
 1. [Project Overview](#1-project-overview)
-2. [Technology Stack](#2-technology-stack)
-3. [System Roles](#3-system-roles)
-4. [Complete System Workflow](#4-complete-system-workflow)
-5. [System Flow](#5-system-flow)
-6. [System Architecture](#6-system-architecture)
-7. [Complete API Documentation](#7-complete-api-documentation)
-8. [API Request/Response Flow](#8-api-requestresponse-flow)
-9. [Authentication & Security](#9-authentication--security)
-10. [Database Architecture](#10-database-architecture)
-11. [Redis & Caching Architecture](#11-redis--caching-architecture)
-12. [Payment Architecture](#12-payment-architecture)
-13. [Email System](#13-email-system)
-14. [Shop & Service Provider System](#14-shop--service-provider-system)
-15. [Frontend Architecture](#15-frontend-architecture)
-16. [Backend Architecture](#16-backend-architecture)
-17. [Error Handling & Structured Logging](#17-error-handling--structured-logging)
-18. [Deployment Guide](#18-deployment-guide)
-19. [Environment Variables](#19-environment-variables)
-20. [Project Structure](#20-project-structure)
-21. [Installation & Local Setup](#21-installation--local-setup)
-22. [API Examples (cURL)](#22-api-examples-curl)
-23. [UI Showcase & Dashboards](#23-ui-showcase--dashboards)
-24. [Future Enhancements](#24-future-enhancements)
-25. [Contributors & Author](#25-contributors--author)
+2. [Problem Analysis & Engineering Scope](#2-problem-analysis--engineering-scope)
+   - [2.1 Problem Statement](#21-problem-statement)
+   - [2.2 Problem Scope](#22-problem-scope)
+   - [2.3 Problem Domain](#23-problem-domain)
+   - [2.4 Solution Domain](#24-solution-domain)
+3. [System Requirements Specification (SRS)](#3-system-requirements-specification-srs)
+   - [3.1 Functional Requirements (FR)](#31-functional-requirements-fr)
+   - [3.2 Non-Functional Requirements (NFR)](#32-non-functional-requirements-nfr)
+4. [Technology Stack](#4-technology-stack)
+5. [System Roles & RBAC Access Matrix](#5-system-roles--rbac-access-matrix)
+6. [Complete System Workflow](#6-complete-system-workflow)
+7. [System Flow](#7-system-flow)
+8. [System Architecture](#8-system-architecture)
+9. [Complete API Documentation](#9-complete-api-documentation)
+10. [API Request/Response Flow](#10-api-requestresponse-flow)
+11. [Authentication & Security Architecture](#11-authentication--security-architecture)
+12. [Database Architecture & Data Models](#12-database-architecture--data-models)
+13. [Redis & Caching Architecture](#13-redis--caching-architecture)
+14. [Payment Architecture & Gateway Integration](#14-payment-architecture--gateway-integration)
+15. [Email & Notification Delivery System](#15-email--notification-delivery-system)
+16. [Shop & Service Provider System](#16-shop--service-provider-system)
+17. [Frontend Architecture](#17-frontend-architecture)
+18. [Backend Architecture](#18-backend-architecture)
+19. [Error Handling & Structured Logging](#19-error-handling--structured-logging)
+20. [Deployment Guide](#20-deployment-guide)
+21. [Environment Variables](#21-environment-variables)
+22. [Project Structure](#22-project-structure)
+23. [Installation & Local Setup](#23-installation--local-setup)
+24. [API Examples (cURL)](#24-api-examples-curl)
+25. [UI Showcase & Dashboards](#25-ui-showcase--dashboards)
+26. [Future Enhancements](#26-future-enhancements)
+27. [Contributors & Author](#27-contributors--author)
 
 ---
 
@@ -61,7 +69,180 @@ To provide a unified, multi-tenant digital hub that automates apartment allocati
 
 ---
 
-# 2. Technology Stack
+# 2. Problem Analysis & Engineering Scope
+
+```mermaid
+graph TD
+    subgraph ProblemSpace ["🔴 Problem Domain (Traditional Challenges)"]
+        P1[Manual Paper Logs & Spreadsheets]
+        P2[Uncontrolled Overdue Rent Leakage]
+        P3[Gate Security Blind Spots & Data Exposure]
+        P4[Cross-Tower Data Bleed / No Isolation]
+        P5[Unverifiable Cash Payments & Disputes]
+    end
+
+    subgraph SolutionSpace ["🟢 Solution Domain (Apartment ERP Suite)"]
+        S1[Centralized Multi-Block Cloud Database]
+        S2[Automated Daily Overdue Calculation Engine]
+        S3[Digital Gate Pass with Privacy Masking]
+        S4[Strict RBAC with Block-Level Scoping]
+        S5[Razorpay Gateway + Cryptographic Receipts]
+    end
+
+    P1 --> S1
+    P2 --> S2
+    P3 --> S3
+    P4 --> S4
+    P5 --> S5
+```
+
+### 2.1 Problem Statement
+Modern residential apartment complexes and multi-tower societies face significant operational friction due to disjointed, manual, and paper-based management processes:
+
+1. **Financial Leakage & Manual Calculation Errors:** Property managers struggle with tracking recurring rental dues, calculating late fees across aging debt tiers, and reconciling manual cash receipts, leading to lost revenue and accounting disputes.
+2. **Security Vulnerabilities & Visitor Mismanagement:** Traditional paper visitor logs at security gates fail to capture accurate entry/exit timestamps, do not compute duration of stay, and unnecessarily expose residents' personal phone numbers and private details to visitors.
+3. **Operational Bottlenecks in Tenant Onboarding:** Front desk receptionists lack structured booking workflows to verify tenant KYC documents, enforce room allocation limits, and calculate dynamic advance security deposits.
+4. **Lack of Multi-Tower Data Isolation:** Without role-based access control (RBAC) and tower-level data scoping, administrative staff from one block can inadvertently view, modify, or tamper with records belonging to other residential blocks.
+5. **Absence of Accountability & Audit Trails:** When room allocations change, rent discounts are applied, or maintenance tickets are resolved, there is no immutable audit log tracking who performed the action, from which IP address, and at what timestamp.
+
+---
+
+### 2.2 Problem Scope
+
+#### 🟢 In-Scope (Delivered by the Platform)
+- **Multi-Tower Governance:** Hierarchical administration spanning Global Super Admins, Block Admins, Front Desk Receptionists, Security Personnel, and Residents.
+- **Role-Based Access Control (RBAC):** Strict role authorization and data partitioning ensuring Block Admins and Receptionists access only their assigned tower (`assignedBlock`).
+- **Tenant Lifecycle Management:** Self-registration, front-desk onboarding, KYC document verification, room allocation (max 4 rooms/resident), and checkout procedures.
+- **Dynamic Advance Rent Rules:** Automatic mathematical computation of required security advance based on lease duration ($60\%$ advance for $\le 6$ months; $4$ months' rent for $> 6$ months).
+- **Automated Overdue Escalation Engine:** Daily scheduled background cron recalculating late fees across 3 distinct color-coded tiers (Orange, Red, Dark Red).
+- **Online & Offline Payment Processing:** Razorpay payment gateway integration with HMAC-SHA256 signature verification and manual cash entry recording with stamped PDF receipts (`RCP-YYYY-XXXXXX`).
+- **Gate Security & Visitor Tracking:** Digital visitor pass issuance, stay duration calculator, restricted resident directory lookup (phone/ID masked), and resident movement logging.
+- **Maintenance & Helpdesk Ticketing:** Complaint logging with priority tags, status progression tracking (`pending` $\rightarrow$ `in_progress` $\rightarrow$ `resolved`), and resolution history.
+- **Two-Factor Authentication & Security:** SHA-256 hashed OTPs, constant-time comparisons, bcrypt password hashing, and sanitized production error masking.
+- **Immutable Audit Logging:** System-wide capture of critical administrative events with actor ID, entity ID, previous/new values, IP addresses, and user agents.
+
+#### 🔴 Out-of-Scope (Future / External Boundaries)
+- Direct integration with smart biometric hardware / turnstile gates (handled via manual security portal entry).
+- Automated banking reconciliation feeds (handled via Razorpay webhooks and manual payment entries).
+- Native mobile applications on iOS/Android app stores (fully responsive web application provided).
+
+---
+
+### 2.3 Problem Domain
+The residential property management domain encompasses operational, financial, and security functions within high-density housing societies:
+- **Hierarchical Tenancy:** Properties are partitioned into Blocks/Towers $\rightarrow$ Floors $\rightarrow$ Rooms/Flats $\rightarrow$ Parking Bays.
+- **Lease Compliance:** Rent dues follow fixed billing cycles, with penalties applied progressively as overdue duration increases.
+- **Gatekeeper Logistics:** High volume of external visitors (guests, delivery agents, service contractors) requiring quick, privacy-safe identity logging.
+- **Multi-Role Coordination:** Distinct operational personas requiring tailored interfaces without privilege escalation or data bleed.
+
+---
+
+### 2.4 Solution Domain
+The solution implements a cloud-native, three-tier model-view-controller (MVC) single-page application (SPA) architecture:
+- **Presentation Layer:** Reactive React 18 frontend with Tailwind CSS dark UI, dynamic role-based layouts, and responsive 8-step booking workflows.
+- **Application & API Layer:** Node.js / Express REST API enforcing request context tracking (`X-Request-Id`), rate limiting, Helmet security headers, JWT authentication, and block-scoping middleware.
+- **Business Engine Layer:** Automated background cron workers executing late fee mathematics, notification dispatchers utilizing HTTPS REST email APIs (Brevo/Resend) and SMTP relays, and cryptographic signature validators.
+- **Data Persistence Layer:** MongoDB Atlas NoSQL database with 16 normalized Mongoose schemas, indexed compound queries, and Cloudinary media storage for tenant KYC documents.
+
+---
+
+# 3. System Requirements Specification (SRS)
+
+```mermaid
+graph LR
+    subgraph FunctionalReqs ["⚙️ Functional Requirements (FR)"]
+        FR1[FR1: Auth & 2FA]
+        FR2[FR2: Multi-Tower RBAC]
+        FR3[FR3: Room Inventory]
+        FR4[FR4: 8-Step Wizard]
+        FR5[FR5: Payments & Overdue]
+        FR6[FR6: Parking Allocation]
+        FR7[FR7: Gate Security Pass]
+        FR8[FR8: Complaint Tickets]
+        FR9[FR9: Notices & Broadcasts]
+        FR10[FR10: Audit Trail]
+    end
+
+    subgraph NonFunctionalReqs ["🛡️ Non-Functional Requirements (NFR)"]
+        NFR1[NFR1: Security & Cryptography]
+        NFR2[NFR2: Performance & Sub-100ms API]
+        NFR3[NFR3: Scalability & Stateless JWT]
+        NFR4[NFR4: Reliability & Data Integrity]
+        NFR5[NFR5: Usability & Dark UI]
+        NFR6[NFR6: Maintainability & MVC]
+    end
+```
+
+### 3.1 Functional Requirements (FR)
+
+| Requirement ID | Module / Feature Area | Functional Specification |
+|---|---|---|
+| **FR-AUTH-01** | Zero-Data Initialization | System must inspect database upon startup; if zero Super Admins exist, `GET /api/auth/setup-status` returns `setupRequired: true`, allowing the first operator to initialize root admin `ROOT-001`. |
+| **FR-AUTH-02** | 2-Step Login with 2FA | User submits identifier (email/mobile) and password. System validates credentials, generates a 6-digit cryptographic OTP, hashes it using SHA-256, dispatches it to the registered email, and issues a short-lived `verificationToken`. Upon OTP submission, system issues a 7-day JWT token. |
+| **FR-AUTH-03** | Password Recovery | User requests password reset by submitting registered email or mobile. System generates a 6-digit reset OTP with a 10-minute expiry and 60-second cooldown. Once verified, a signed `resetToken` allows updating the password. |
+| **FR-AUTH-04** | Staff Zero-Password Activation | When Super Admin or Block Admin creates staff (Block Admin / Receptionist), the account is initialized in `pending_verification` status. Staff verifies via a 6-digit email OTP (or 1-click email link) and gains immediate access to the dashboard. |
+| **FR-RBAC-01** | Role-Based Access Control | System must strictly enforce permissions across 5 roles: `super_admin`, `block_admin`, `receptionist`, `resident`, `security`. Unauthorized endpoints return HTTP 403 Forbidden. |
+| **FR-RBAC-02** | Multi-Block Tower Isolation | Block Admins and Receptionists are strictly scoped to their `assignedBlock`. Queries automatically filter by `blockId`, preventing access to data belonging to other towers. |
+| **FR-RBAC-03** | Receptionist Quota Guard | System enforces a business rule limiting each block to a maximum of **2 active Receptionists**. |
+| **FR-ROOM-01** | Block & Room Inventory | Super Admin creates blocks with defined floors and room numbers. Block Admins create and manage rooms (1BHK, 2BHK, 3BHK, Studio, Penthouse) with base rent, deposit, capacity, and amenities. |
+| **FR-ROOM-02** | Real-Time Availability Filter | Public and authenticated users can query `GET /api/rooms/available` with block, floor, and rent filters to view rooms with `status: 'available'`. |
+| **FR-BOOK-01** | 8-Step Booking Wizard | Front desk receptionists and residents execute an 8-step guided booking flow: (1) Tenant Search/Register $\rightarrow$ (2) Stay Duration $\rightarrow$ (3) Occupant Details $\rightarrow$ (4) KYC Upload $\rightarrow$ (5) Room Selection (Max 4) $\rightarrow$ (6) Advance Calculation $\rightarrow$ (7) Parking Bay $\rightarrow$ (8) Confirmation & Receipt. |
+| **FR-BOOK-02** | Allocation Constraint Limit | A single resident profile is constrained to holding a **maximum of 4 active room allocations** simultaneously across the complex. |
+| **FR-PAY-01** | Dynamic Advance Rent Rules | For lease durations $\le 6$ months, advance rent is calculated as: $$\text{Advance} = 0.60 \times \text{Monthly Rent}$$ For lease durations $> 6$ months, advance rent is calculated as: $$\text{Advance} = 4 \times \text{Monthly Rent}$$ |
+| **FR-PAY-02** | Razorpay Gateway Processing | System creates server-side Razorpay orders (`amount`, `currency: 'INR'`) and verifies HMAC-SHA256 signatures upon payment completion before updating allocation and due statuses. |
+| **FR-PAY-03** | Manual Cash/Bank Entry | Receptionists and Admins can record offline cash, cheque, or direct bank transfer payments, capturing payer details, transaction reference, and issuing stamped printable receipts. |
+| **FR-PAY-04** | Unique Stamped Receipts | Every successful transaction generates an immutable receipt with a unique identifier formatted as `RCP-YYYY-XXXXXX`. |
+| **FR-DUE-01** | Automated Overdue Cron Engine | A background cron job executes daily at 00:00 UTC to evaluate unpaid dues and dynamically calculate late fee penalties across 3 overdue tiers: <br>• **Tier 1 (Orange, 1–10 Days):** $\text{Late Fee} = \min(500, \text{days} \times 50)$<br>• **Tier 2 (Red, 11–30 Days):** $\text{Late Fee} = 500 + (\text{days} - 10) \times 75$<br>• **Tier 3 (Dark Red, >30 Days):** $\text{Late Fee} = 2000 + (\text{days} - 30) \times 100$ |
+| **FR-PARK-01** | Parking Bay Allocation | Admins manage parking slots (Standard, 4-Wheeler, Compact, EV Charging). Slots can be allocated to residents with assigned vehicle numbers and vehicle types. |
+| **FR-SEC-01** | Digital Visitor Check-In/Out | Security desk checks in visitors with host flat number, visitor name, phone number, vehicle number, and purpose. Check-out updates departure timestamp and calculates exact stay duration. |
+| **FR-SEC-02** | Privacy-Masked Resident Lookup | Security desk can lookup resident flat numbers and authorized vehicle registrations while phone numbers, emails, financial dues, and KYC documents remain strictly masked. |
+| **FR-SEC-03** | Resident Gate Movement Logging | Security logs resident vehicle/pedestrian entries and exits to maintain real-time on-premises occupancy logs. |
+| **FR-COMP-01** | Maintenance Helpdesk Ticketing | Residents submit maintenance or parking complaints with category, priority, description, and photo attachments. Admins update ticket status (`pending`, `in_progress`, `resolved`). |
+| **FR-NOTIF-01** | Announcements & Notices | Admins publish society-wide or block-specific broadcast notices with priority flags (`normal`, `urgent`, `critical`). |
+| **FR-NOTIF-02** | Multi-Channel Notifications | System dispatches in-app bell notifications and responsive HTML emails for booking confirmations, OTP verifications, payment receipts, and overdue notices. |
+| **FR-AUDIT-01** | Immutable Audit Trail | All state-altering administrative actions (user updates, payment creations, manual allocations, status overrides) are recorded in `auditlogs` with actor ID, entity ID, previous/new value diffs, IP address, and user agent. |
+
+---
+
+### 3.2 Non-Functional Requirements (NFR)
+
+#### 🔒 NFR-1: Security & Cryptography
+- **Password Protection:** Passwords hashed using `bcryptjs` with **10 cryptographic salt rounds**. Plaintext passwords are never persisted or logged.
+- **Timing-Safe OTP Verification:** One-time passcodes are hashed using **SHA-256** and verified via `crypto.timingSafeEqual` buffers to eliminate timing side-channel attacks.
+- **Stateless Tokens:** JSON Web Tokens signed with HMAC-SHA256 (`JWT_SECRET`) and enforced with a 7-day expiration lifespan.
+- **HTTP Header Hardening:** `helmet` middleware sets secure headers including `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, and XSS filtering.
+- **Rate Limiting:** IP-based sliding window rate limiter restricts traffic to **500 requests per 15 minutes** per IP address to mitigate brute-force and DDoS vectors.
+- **Sensitive Payload Masking:** Centralized logger automatically sanitizes credit cards, CVVs, passwords, JWT tokens, and OTP codes before emitting to console or log streams.
+
+#### ⚡ NFR-2: Performance & Latency
+- **API Response Latency:** 95% of standard CRUD read/write API requests complete within **$< 120\text{ ms}$**.
+- **Non-Blocking Email Dispatch:** Email sending executes asynchronously in the background via HTTPS REST APIs (Brevo / Resend) with strict **4-second socket timeouts**, ensuring the HTTP client response is returned in **$< 80\text{ ms}$**.
+- **Asset Optimization:** Frontend bundled with Vite, achieving tree-shaken chunks with Gzip compression ($< 400\text{ kB}$ vendor bundle) and initial paint times of **$< 1.2\text{ s}$**.
+- **Database Query Indexing:** Compound indexes on frequently filtered fields (`assignedBlock`, `roomNumber`, `status`, `dueDate`) ensure index-covered scans for high-volume endpoints.
+
+#### 📈 NFR-3: Scalability & High Availability
+- **Stateless Backend Architecture:** Express server instances store zero in-memory session state, allowing seamless horizontal scaling behind load balancers.
+- **Cloud-Native Database:** Managed MongoDB Atlas cluster provides automated replication, failover, continuous backups, and vertical/horizontal sharding capabilities.
+- **Media Offloading:** All image assets (KYC identity documents, receipt stamps) are offloaded directly to Cloudinary CDN, minimizing application server bandwidth consumption.
+
+#### 🛡️ NFR-4: Reliability & Data Integrity
+- **Transactional Consistency:** Payment verification and room allocation execute sequentially with atomic status updates, preventing double allocation under concurrent checkout.
+- **Idempotent Payment Handling:** Unique sparse indexing on `paymentId` and `receiptNumber` guarantees that network retries cannot produce duplicate payment records or ledger entries.
+- **Resilient MongoDB Auto-Reconnect:** Mongoose client is configured with auto-reconnect listeners and SSL/TLS socket validation (`retryWrites=true`).
+
+#### 🎨 NFR-5: Usability, Accessibility & Design
+- **Responsive Dark Theme:** Consistent slate/indigo design system crafted with Tailwind CSS, supporting mobile (360px), tablet (768px), and high-resolution desktop screens (1920px+).
+- **Guided Workflows:** Complex operations (such as tenant onboarding and room allocation) utilize step-by-step wizard interfaces with live client-side validation and feedback.
+- **Accessibility & A11y:** Form controls implement semantic HTML5 elements with appropriate `autoComplete`, `inputMode`, `aria-label`, and high-contrast color ratios.
+
+#### 🔧 NFR-6: Maintainability, Modularity & Observability
+- **Clean Layered MVC Architecture:** Strict separation of concerns between Routes $\rightarrow$ Middleware $\rightarrow$ Controllers $\rightarrow$ Services $\rightarrow$ Data Models.
+- **Correlation Request Tracking:** Every incoming HTTP request is assigned a unique UUID (`req.id`), passed through the `X-Request-Id` response header for end-to-end tracing.
+- **Operational Error Classification:** Custom `AppError` class differentiates between operational errors (4xx client errors) and unhandled programmatic exceptions (500 internal errors).
+
+---
+
+# 4. Technology Stack
 
 ### 💻 Frontend
 | Technology / Library | Version | Purpose in Application |
@@ -95,7 +276,7 @@ To provide a unified, multi-tenant digital hub that automates apartment allocati
 
 ---
 
-# 3. System Roles
+# 5. System Roles & RBAC Access Matrix
 
 The system implements **5 core operational roles** with strict Role-Based Access Control (RBAC):
 
@@ -119,7 +300,7 @@ graph TD
 
 ---
 
-# 4. Complete System Workflow
+# 6. Complete System Workflow
 
 ```mermaid
 sequenceDiagram
@@ -131,17 +312,18 @@ sequenceDiagram
     participant API as Backend API
     participant DB as MongoDB Atlas
     participant RZP as Razorpay
+    participant MAIL as Email Service
 
     SA->>API: 1. Setup Root Admin (First Run)
     API->>DB: Initialize ROOT-001 Super Admin
     SA->>API: 2. Create Block & Block Admin
     API->>DB: Create Block Admin (pending_verification)
-    API-->>BA: Send Verification Email with 6-Digit OTP
+    API->>MAIL: Dispatch 6-digit Verification OTP
     BA->>API: 3. Submit OTP to /api/auth/verify-otp
     API->>DB: Activate Account (isEmailVerified=true)
     API-->>BA: Issue JWT Token & Route to Dashboard
     BA->>API: 4. Create Receptionist
-    API-->>REC: Send Verification Email with OTP
+    API->>MAIL: Dispatch Receptionist Verification OTP
     REC->>API: 5. Verify OTP & Activate Account
     REC->>API: 6. Run 8-Step Booking Wizard for Resident
     API->>RZP: 7. Create Advance Payment Order
@@ -170,7 +352,7 @@ sequenceDiagram
 
 ---
 
-# 5. System Flow
+# 7. System Flow
 
 ```text
                                ┌─────────────────────────┐
@@ -210,7 +392,7 @@ sequenceDiagram
              ┌───────────────────────┐              ┌───────────────────────┐
              │  Business Services    │              │  External Services    │
              │  - Notification Engine│              │  - Razorpay Gateway   │
-             │  - Overdue Cron Engine│              │  - Nodemailer SMTP    │
+             │  - Overdue Cron Engine│              │  - Brevo / Resend API │
              │  - Audit Logger       │              │  - Cloudinary Storage │
              └───────────┬───────────┘              └───────────────────────┘
                          │
@@ -227,7 +409,7 @@ sequenceDiagram
 
 ---
 
-# 6. System Architecture
+# 8. System Architecture
 
 ```mermaid
 graph TB
@@ -271,6 +453,7 @@ graph TB
     subgraph DataLayer ["Data & External Providers"]
         Mongo[(MongoDB Atlas Database)]
         Cloudinary[(Cloudinary File Store)]
+        BrevoAPI[Brevo / Resend REST API]
         SMTP[Gmail / SMTP Mailer]
         RazorpayGateway[Razorpay Payment Gateway]
     end
@@ -285,13 +468,14 @@ graph TB
     ControllerLayer --> ServiceLayer
     ServiceLayer --> Mongo
     ServiceLayer --> Cloudinary
+    ServiceLayer --> BrevoAPI
     ServiceLayer --> SMTP
     ServiceLayer --> RazorpayGateway
 ```
 
 ---
 
-# 7. Complete API Documentation
+# 9. Complete API Documentation
 
 ### 🔐 Authentication & Identity APIs (`/api/auth`)
 | Method | Endpoint | Authorized Roles | Description |
@@ -432,7 +616,7 @@ graph TB
 
 ---
 
-# 8. API Request/Response Flow
+# 10. API Request/Response Flow
 
 Every inbound HTTP request travels through the following validated pipeline:
 
@@ -458,7 +642,7 @@ Every inbound HTTP request travels through the following validated pipeline:
 
 ---
 
-# 9. Authentication & Security
+# 11. Authentication & Security Architecture
 
 - **JSON Web Tokens (JWT):** Signed using HMAC-SHA256 with 7-day expiration (`JWT_EXPIRES_IN=7d`).
 - **Cryptographic OTP Hashing:** All one-time passcodes (`loginOtpHash`, `emailOtpHash`, `resetPasswordOtpHash`) are stored as **SHA-256 hashes**. Comparison is performed with `crypto.timingSafeEqual` to prevent timing attacks.
@@ -468,7 +652,7 @@ Every inbound HTTP request travels through the following validated pipeline:
 
 ---
 
-# 10. Database Architecture
+# 12. Database Architecture & Data Models
 
 The system uses **MongoDB Atlas** with **16 specialized Mongoose collections**:
 
@@ -497,7 +681,7 @@ erDiagram
 
 ---
 
-# 11. Redis & Caching Architecture
+# 13. Redis & Caching Architecture
 
 ### Current Implementation:
 - High-efficiency in-memory query indexing and Mongoose projection caching are utilized across all hot API routes.
@@ -509,7 +693,7 @@ erDiagram
 
 ---
 
-# 12. Payment Architecture
+# 14. Payment Architecture & Gateway Integration
 
 ```mermaid
 sequenceDiagram
@@ -541,10 +725,10 @@ sequenceDiagram
 
 ---
 
-# 13. Email System
+# 15. Email & Notification Delivery System
 
-- **Protocol:** SMTP via **Nodemailer** (supports Gmail App Passwords and custom SMTP relays).
-- **Security:** Zero plaintext OTPs in email logs.
+- **Multi-Cloud HTTPS REST Delivery:** Native support for **Brevo (formerly Sendinblue) HTTP API** and **Resend API** over HTTPS port 443, ensuring 100% email delivery from cloud hosts where outbound SMTP ports (25/465/587) are firewalled.
+- **SMTP Relay Fallback:** Supports Nodemailer transport for local development and dedicated Brevo / Gmail SMTP relays.
 - **Responsive HTML Templates:**
   - `adminOtpVerification`: Block Admin verification button & 6-digit OTP.
   - `receptionistOtpVerification`: Receptionist verification button & 6-digit OTP.
@@ -555,14 +739,14 @@ sequenceDiagram
 
 ---
 
-# 14. Shop & Service Provider System
+# 16. Shop & Service Provider System
 
 - **Modular Architecture:** The system structure is engineered to allow seamless integration of commercial community services (e.g. laundry, on-site grocery, maintenance contracts).
 - **Extension Hooks:** Ready data models and controller hooks exist for extending service catalogs and vendor invoicing.
 
 ---
 
-# 15. Frontend Architecture
+# 17. Frontend Architecture
 
 ```text
 frontend/src/
@@ -570,7 +754,6 @@ frontend/src/
 │   └── client.js             # Centralized Axios client with JWT interceptors
 ├── components/
 │   ├── common/
-│   │   ├── DemoRoleBar.jsx   # 1-Click interactive role switching toolbar
 │   │   ├── ErrorBoundary.jsx # React exception boundary
 │   │   ├── ProtectedRoute.jsx# Role-based route guard
 │   │   ├── RazorpayModal.jsx # Razorpay checkout dialog
@@ -597,7 +780,7 @@ frontend/src/
 
 ---
 
-# 16. Backend Architecture
+# 18. Backend Architecture
 
 ```text
 backend/src/
@@ -615,7 +798,7 @@ backend/src/
 ├── routes/                   # 15 Express route files
 ├── services/
 │   ├── cronService.js        # Daily overdue engine & reminder cron
-│   ├── emailService.js       # Nodemailer SMTP transporter
+│   ├── emailService.js       # Multi-provider HTTPS REST & SMTP transporter
 │   ├── notificationService.js# HTML email template renderer
 │   └── paymentService.js     # Payment creation & verification helpers
 ├── utils/
@@ -629,7 +812,7 @@ backend/src/
 
 ---
 
-# 17. Error Handling & Structured Logging
+# 19. Error Handling & Structured Logging
 
 ```text
 [Incoming Error / Exception]
@@ -648,7 +831,7 @@ backend/src/
 
 ---
 
-# 18. Deployment Guide
+# 20. Deployment Guide
 
 ### Deploying to Vercel (Frontend)
 1. Import repository into **Vercel**.
@@ -664,7 +847,7 @@ backend/src/
 
 ---
 
-# 19. Environment Variables
+# 21. Environment Variables
 
 Create a `backend/.env` file with the following variables:
 
@@ -682,15 +865,18 @@ DATABASE_URL=mongodb+srv://<username>:<password>@cluster0.mongodb.net/apartment_
 JWT_SECRET=your_super_secret_jwt_encryption_key
 JWT_EXPIRES_IN=7d
 
-# SMTP Configuration (Nodemailer)
-SMTP_HOST=smtp.gmail.com
+# Email Configuration (Brevo HTTPS REST API & SMTP Relay)
+BREVO_API_KEY=xkeysib-your_brevo_api_key_here
+BREVO_SMTP_KEY=xsmtpsib-your_brevo_smtp_key_here
+SMTP_HOST=smtp-relay.brevo.com
 SMTP_PORT=587
-SMTP_SECURE=false
-SMTP_USER=your_email@gmail.com
-SMTP_PASS=your_app_password
-SMTP_PASSWORD=your_app_password
-SMTP_FROM_NAME="Apartment Management System"
+SMTP_USER=your_smtp_login_here
+SMTP_PASS=your_smtp_key_here
+SMTP_FROM_NAME="Vijaya Laxmi Complex"
 SMTP_FROM_EMAIL=your_email@gmail.com
+
+# Alternative: Resend HTTPS REST API
+RESEND_API_KEY=re_your_resend_api_key_here
 
 # OTP Security Parameters
 OTP_EXPIRY_MINUTES=10
@@ -710,7 +896,7 @@ RAZORPAY_KEY_SECRET=your_razorpay_key_secret
 
 ---
 
-# 20. Project Structure
+# 22. Project Structure
 
 ```text
 Apartment-Management/
@@ -746,12 +932,14 @@ Apartment-Management/
 │   ├── tailwind.config.js
 │   └── vite.config.js
 ├── .gitignore
+├── vercel.json
+├── package.json
 └── README.md
 ```
 
 ---
 
-# 21. Installation & Local Setup
+# 23. Installation & Local Setup
 
 ### 1. Clone Repository
 ```bash
@@ -763,7 +951,7 @@ cd Apartment-Management
 ```bash
 cd backend
 npm install
-# Configure backend/.env with your MongoDB & SMTP credentials
+# Configure backend/.env with your MongoDB & SMTP/Brevo credentials
 npm run seed     # Optional: Populates demo blocks, rooms, parking & accounts
 npm start        # Starts server on http://localhost:5000
 ```
@@ -777,7 +965,7 @@ npm run dev      # Starts Vite client on http://localhost:5173
 
 ---
 
-# 22. API Examples (cURL)
+# 24. API Examples (cURL)
 
 ### 1. User Login (Step 1)
 ```bash
@@ -809,7 +997,7 @@ curl -X POST http://localhost:5000/api/payments/razorpay/create-order \
 
 ---
 
-# 23. UI Showcase & Dashboards
+# 25. UI Showcase & Dashboards
 
 | Role Portal | Dashboard Capabilities |
 |---|---|
@@ -821,7 +1009,7 @@ curl -X POST http://localhost:5000/api/payments/razorpay/create-order \
 
 ---
 
-# 24. Future Enhancements
+# 26. Future Enhancements
 
 - 📱 Mobile App (React Native / Flutter) for instant gate push notifications.
 - ⚡ Redis cluster integration for distributed real-time checkout locks.
@@ -830,8 +1018,9 @@ curl -X POST http://localhost:5000/api/payments/razorpay/create-order \
 
 ---
 
-# 25. Contributors & Author
+# 27. Contributors & Author
 
 **Author:** [Ramagiri Vardhan](https://github.com/Ramagirivardhan-2005)  
 **Repository:** [https://github.com/Ramagirivardhan-2005/Apartment-Management](https://github.com/Ramagirivardhan-2005/Apartment-Management)  
 **License:** MIT
+
